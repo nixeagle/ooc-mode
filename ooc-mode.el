@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 15
+;;     Update #: 17
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -59,13 +59,14 @@
          (list
           (cons (concat "\\<"
                         (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
-                                      "super" "new" "const" "static" "include"
+                                      "super" "const" "static" "include"
                                       "import" "break" "continue" "fallthrough"
                                       "implement" "override" "if" "else" "for" "while"
                                       "do" "switch" "case" "version" "return" "ctype"
                                       "typedef" "use" "extends" "enum") t)
                         "\\>")
                 'font-lock-keyword-face)
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
           '("\\\(\(\\\|->\\\|:\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face))
          (c-lang-const c-matchers-3)))

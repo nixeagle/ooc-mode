@@ -4,6 +4,8 @@ int main () {
 
 }
 
+int foo;
+
 // ooc names
 a:
 foo:
@@ -33,7 +35,7 @@ Foo: class {
     init: func ~a (a: Int) {
         "foo init" println()
     }
-    
+
     doSomething: func {
         "Foo doSomething" println()
     }
@@ -43,7 +45,7 @@ Baz: class extends Foo {
     init: func ~a (a: Int) {
         "baz init" println()
     }
-    
+
     doSomething: func {
         "Baz doSomething" println()
     }
