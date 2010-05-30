@@ -87,7 +87,7 @@
   "Syntax table for `ooc-mode'.")
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.ooc\\'"))
+(add-to-list 'auto-mode-alist '("\\.ooc\\'" . ooc-mode))
 
 (defun ooc-mode ()
   "Major mode for editing ooc files."
