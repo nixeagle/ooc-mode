@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 10
+;;     Update #: 15
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -51,16 +51,9 @@
 
   (c-add-language 'ooc-mode 'c-mode))
 
-(c-lang-defconst c-modifier-kwds
-  ooc (cons "func" (c-lang-const c-modifier-kwds)))
-
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
 
 (progn
-  (c-lang-defconst c-matchers-2
-    ooc (append
-         '()
-         (c-lang-const c-matchers-2)))
   (c-lang-defconst c-matchers-3
     ooc (append
          (list
@@ -78,11 +71,6 @@
          (c-lang-const c-matchers-3)))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
-
-(define-derived-mode ooc-mode c-mode "ooc"
-  "Majore mode for editing ooc files.
-
-\\({ooc-mode-map}")
 
 (defvar ooc-mode-hook nil
   "Hook to be called after `ooc-mode' is called.")

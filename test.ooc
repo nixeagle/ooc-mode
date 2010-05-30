@@ -18,7 +18,7 @@ fo!o:
 
 
 // Sample working ooc snippet
-foo: func (String) -> Int {}
+foo: func (String) -> /* foo */ Int {}
 
 foo: Int
 
