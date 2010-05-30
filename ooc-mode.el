@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 8
+;;     Update #: 9
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -51,19 +51,32 @@
 
   (c-add-language 'ooc-mode 'c-mode))
 
-
-
+(c-lang-defconst c-modifier-kwds
+  ooc (cons "func" (c-lang-const c-modifier-kwds)))
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
-(defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
 
 (progn
+  (c-lang-defconst c-matchers-2
+    ooc (append
+         '()
+         (c-lang-const c-matchers-2)))
   (c-lang-defconst c-matchers-3
     ooc (append
          (list
+          (cons (concat "\\<"
+                        (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
+                                      "super" "new" "const" "static" "include"
+                                      "import" "break" "continue" "fallthrough"
+                                      "implement" "override" "if" "else" "for" "while"
+                                      "do" "switch" "case" "version" "return" "ctype"
+                                      "typedef" "use" "extends") t)
+                        "\\>")
+                'font-lock-keyword-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
           '("\\\(\(\\\|->\\\|:\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face))
          (c-lang-const c-matchers-3)))
+  (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
 
 (define-derived-mode ooc-mode c-mode "ooc"
