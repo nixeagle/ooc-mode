@@ -24,3 +24,33 @@ foo: Int
 
 // assignment
 foo := 12
+
+
+// more ooc testing
+Foo: class {
+    init: func { init(1) }
+
+    init: func ~a (a: Int) {
+        "foo init" println()
+    }
+    
+    doSomething: func {
+        "Foo doSomething" println()
+    }
+}
+
+Baz: class extends Foo {
+    init: func ~a (a: Int) {
+        "baz init" println()
+    }
+    
+    doSomething: func {
+        "Baz doSomething" println()
+    }
+}
+
+main: func {
+    f := Baz new()      // => "foo init"
+    f doSomething()     // => "Foo doSomething"
+}
+
