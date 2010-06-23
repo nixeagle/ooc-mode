@@ -5,10 +5,10 @@
 ;; Author: James
 ;; Maintainer:
 ;; Created: Sat May 29 20:34:29 2010 (-0400)
-;; Version:
+;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 46
+;;     Update #: 48
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -95,16 +95,20 @@
             ;; Mark signle words not yet highlighted as variables
             ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (let ((p (point)))
-                (prog1 (search-forward ")")
+               (prog1 (search-forward ")")
                   (search-backward "("))) nil (1 font-lock-variable-name-face)))
+
           ;; naive approach, treat |....| as a variable
           '("|[0-9a-zA-Z_\\!\\? ,]*|" (0 nil)
             ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (search-backward "|" nil nil 2) nil (1 font-lock-variable-name-face)))
-          ;; Typenames inside of <....> markers
-          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
-          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
+
+         ; (print (format "a"))
+          ;; variable declarations, start of line
+
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" (1 font-lock-function-name-face))
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))

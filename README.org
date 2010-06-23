@@ -1,0 +1,36 @@
+Emacs major mode for ooc-lang.
+
+* Quick setup
+  Into a directory of your choice do...
+  : git clone git://github.com/nixeagle/ooc-mode.git
+
+  Take the full path of this directory, for example:
+  : cd ooc-mode/ && pwd
+
+  Edit your =~/.emacs= or =~/.emacs.d/init.el= (whichever you have) with
+  emacs and include the line:
+  : (add-to-list 'load-path "<output of pwd above>")
+
+  Tell emacs to reload that buffer with:
+  : M-x eval-buffer RET
+
+  Now just open any ooc file and emacs will use ooc-mode. If you want to
+  have flymake support, be sure to do:
+  : M-x load-library RET flymake-ooc RET
+
+  Then turn flymake on as normal with: =M-x flymake RET=.
+
+
+* Features
+
+  Currently working:
+
+  * automatic tab indention (still a few bugs...)
+  * complex syntax highlighting.
+  * With flymake-ooc: instant compiler information seconds after you
+    screwup on a line.
+
+
+* Bugs, issues, problems...
+
+  Please use the issues tab to report any issues.

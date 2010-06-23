@@ -5,10 +5,10 @@
 ;; Author: James
 ;; Maintainer:
 ;; Created: Wed Jun 23 21:34:45 2010 (+0000)
-;; Version:
+;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 4
+;;     Update #: 6
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -66,6 +66,11 @@
 
 (add-to-list 'flymake-err-line-patterns
              '("^\\(.*\\):\\([0-9]+\\):\\([0-9]+\\) \\[[^\]]+\\] \\(.*\\)" 1 2 3 4))
+
+;;;###autoload
+(defun flymake-ooc-mode ()
+  (interactive)
+  (flymake-mode))
 
 (provide 'flymake-ooc)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
