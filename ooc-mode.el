@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 39
+;;     Update #: 42
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -94,7 +94,9 @@
                 (prog1 (search-forward ")")
                   (search-backward "("))) nil (1 font-lock-variable-name-face)))
           ;; naive approach, treat |....| as a variable
-          '("|\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>|" 1 font-lock-variable-name-face)
+          '("|[0-9a-zA-Z_\\!\\? ,]*|" (0 nil)
+            ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
+             (search-backward "|" nil nil 2) nil (1 font-lock-variable-name-face)))
           ;; Typenames inside of <....> markers
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
