@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 37
+;;     Update #: 38
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -77,7 +77,7 @@
                 'font-lock-keyword-face)
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
-          '("\\<func\\> *(" (0 nil)
+          '("\\<func\\> *\\(~\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>\\)? *(" (0 nil)
             ;; Mark anything following a : as a type.
             ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (let ((p (point)))
