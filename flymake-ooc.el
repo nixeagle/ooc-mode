@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 2
+;;     Update #: 3
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -45,9 +45,16 @@
 ;;
 ;;; Code:
 (require 'flymake)
+(defgroup flymake-ooc nil
+  "Flymake for ooc."
+  :group 'flymake)
+(defcustom flymake-ooc-rock-binary "rock"
+  "Location of the rock compiler executable."
+  :group 'flymake-ooc
+  :type 'string)
 
 (defun flymake-ooc-init ()
-  (list "~/lisp/rock-0.9.1-source/bin/rock"
+  (list flymake-ooc-rock-binary
         (list "-onlygen"
               (file-relative-name
                (flymake-init-create-temp-buffer-copy
