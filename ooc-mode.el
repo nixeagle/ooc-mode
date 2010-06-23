@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 42
+;;     Update #: 44
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -77,9 +77,11 @@
                 'font-lock-keyword-face)
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
+          ;; handle the func type
+          '("\\<Func\\> (\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\><" 1 font-lock-type-face)
           '("\\<func\\> *\\(~\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>\\)? *(" (0 nil)
             ;; Mark anything following a : as a type.
-            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
+            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)"
              (let ((p (point)))
                (prog1 (search-forward ")")
                  (search-backward "("))) nil (1 font-lock-type-face))
