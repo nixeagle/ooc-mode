@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 27
+;;     Update #: 28
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -70,8 +70,11 @@
                                       ) t)
                         "\\>")
                 'font-lock-keyword-face)
+          (cons (concat "\\<" (regexp-opt '("true" "false") t) "\\>")
+                'font-lock-constant-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
+
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face))
          ;; Remove these for now, they mostly conflict with what we want
          ;; to do.
