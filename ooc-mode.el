@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 44
+;;     Update #: 46
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -83,13 +83,15 @@
             ;; Mark anything following a : as a type.
             ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)"
              (let ((p (point)))
-               (prog1 (search-forward ")")
+               (prog1 (search-forward-regexp ")\\|$")
                  (search-backward "("))) nil (1 font-lock-type-face))
             ;; Mark generics as a type.
             ("<\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>>"
              (let ((p (point)))
-               (prog1 (search-forward ")")
+               (prog1 (search-forward-regexp ")\\|$")
                  (search-backward "("))) nil (1 font-lock-type-face))
+
+
             ;; Mark signle words not yet highlighted as variables
             ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (let ((p (point)))
