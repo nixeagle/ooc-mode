@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 21
+;;     Update #: 22
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -111,7 +111,7 @@
   (set-syntax-table ooc-mode-syntax-table)
   (use-local-map c-mode-map)
 ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
-  (c-init-language-vars-for 'ooc-mode)
+  (c-init-language-vars ooc-mode)
   (c-common-init 'ooc-mode)
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
