@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 18
+;;     Update #: 21
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -73,6 +73,16 @@
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
 
+(c-lang-defconst c-stmt-delim-chars
+  ooc "^;{}?:")                         ;these are the defaults
+(c-lang-defconst c-stmt-delim-chars-with-comma
+  ooc "^;,{}?:")                        ; these are the defaults
+
+;; Lets make all EOL markers equivalent to ';' This variable could have
+;; been named _something_ better... its not asm here
+(c-lang-defconst c-at-vsemi-p-fn
+  ooc (lambda (&optional pos) t))
+
 (defvar ooc-mode-hook nil
   "Hook to be called after `ooc-mode' is called.")
 
@@ -101,7 +111,7 @@
   (set-syntax-table ooc-mode-syntax-table)
   (use-local-map c-mode-map)
 ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
-  (c-init-language-vars ooc-mode)
+  (c-init-language-vars-for 'ooc-mode)
   (c-common-init 'ooc-mode)
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
