@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 30
+;;     Update #: 31
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -66,7 +66,7 @@
                                       "implement" "override" "if" "else" "for" "while"
                                       "do" "switch" "case" "version" "return" "ctype"
                                       "typedef" "use" "extends" "enum"
-                                      "as"
+                                      "as" "in"
                                       ) t)
                         "\\>")
                 'font-lock-keyword-face)
