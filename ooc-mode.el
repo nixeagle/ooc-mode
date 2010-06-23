@@ -150,6 +150,7 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.ooc\\'" . ooc-mode))
 
+;;;###autoload
 (defun ooc-mode ()
   "Major mode for editing ooc files."
   (interactive)
