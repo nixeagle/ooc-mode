@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 34
+;;     Update #: 35
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -82,7 +82,7 @@
                 (prog1 (search-forward ")")
                   (search-backward "("))) nil (1 font-lock-variable-name-face)))
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
-          ;'("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
