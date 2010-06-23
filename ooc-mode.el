@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 36
+;;     Update #: 37
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -53,6 +53,11 @@
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
 
+(defun ooc-look-for-lambda-list-end ()
+  (let ((p (point)))
+    (prog1 (search-forward ")")
+      (search-backward "("))))
+
 (progn
   (c-lang-defconst c-matchers-3
 
@@ -73,10 +78,17 @@
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
           '("\\<func\\> *(" (0 nil)
-
-            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>" (let ((p (point)))
-                (prog1 (search-forward ")")
-                  (search-backward "("))) nil (1 font-lock-type-face))
+            ;; Mark anything following a : as a type.
+            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
+             (let ((p (point)))
+               (prog1 (search-forward ")")
+                 (search-backward "("))) nil (1 font-lock-type-face))
+            ;; Mark generics as a type.
+            ("<\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>>"
+             (let ((p (point)))
+               (prog1 (search-forward ")")
+                 (search-backward "("))) nil (1 font-lock-type-face))
+            ;; Mark signle words not yet highlighted as variables
             ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (let ((p (point)))
                 (prog1 (search-forward ")")
