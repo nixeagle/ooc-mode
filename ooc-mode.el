@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 28
+;;     Update #: 29
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -75,7 +75,8 @@
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
-          '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face))
+          '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
+          '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))
          ;; Remove these for now, they mostly conflict with what we want
          ;; to do.
          ;; (c-lang-const c-matchers-3)
