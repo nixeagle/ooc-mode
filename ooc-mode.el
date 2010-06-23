@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 33
+;;     Update #: 34
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -73,16 +73,19 @@
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
           '("\\<func\\>" (0 nil)
-            ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>.*)" nil nil (1 font-lock-variable-name-face)))
+
+            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>" (let ((p (point)))
+                (prog1 (search-forward ")")
+                  (search-backward "("))) nil (1 font-lock-type-face))
+            ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
+             (let ((p (point)))
+                (prog1 (search-forward ")")
+                  (search-backward "("))) nil (1 font-lock-variable-name-face)))
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
-          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
+          ;'("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
-          '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))
-         ;; Remove these for now, they mostly conflict with what we want
-         ;; to do.
-         ;; (c-lang-const c-matchers-3)
-         ))
+          '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
 
