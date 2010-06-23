@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 25
+;;     Update #: 26
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -55,7 +55,9 @@
 
 (progn
   (c-lang-defconst c-matchers-3
+
     ooc (append
+         ;(c-lang-const c-matchers-3)
          (list
           (cons (concat "\\<"
                         (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
@@ -69,7 +71,10 @@
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face))
-         (c-lang-const c-matchers-3)))
+         ;; Remove these for now, they mostly conflict with what we want
+         ;; to do.
+         ;; (c-lang-const c-matchers-3)
+         ))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
 
