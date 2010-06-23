@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 26
+;;     Update #: 27
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -65,7 +65,9 @@
                                       "import" "break" "continue" "fallthrough"
                                       "implement" "override" "if" "else" "for" "while"
                                       "do" "switch" "case" "version" "return" "ctype"
-                                      "typedef" "use" "extends" "enum") t)
+                                      "typedef" "use" "extends" "enum"
+                                      "as"
+                                      ) t)
                         "\\>")
                 'font-lock-keyword-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
