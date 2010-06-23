@@ -131,7 +131,14 @@
                                    (label . 4)
                                    ;; Terrible hack to at least close the
                                    ;; defun on the right position.
-                                   (defun-close . [0])))))
+                                   (defun-close . [0])
+                                   ;; TODO: This needs indent to [19] if
+                                   ;; it is not an anonymous function
+                                   ;; embedded in an arglist. We can tell
+                                   ;; this by looking for |...| just after
+                                   ;; a ',' char.
+                                   (arglist-cont-nonempty . +)
+                                   (arglist-close . 0)))))
 
 (defvar ooc-mode-syntax-table (ooc-mode-make-syntax-table)
   "Syntax table for `ooc-mode'.")
