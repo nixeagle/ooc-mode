@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 31
+;;     Update #: 32
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -70,7 +70,7 @@
                                       ) t)
                         "\\>")
                 'font-lock-keyword-face)
-          (cons (concat "\\<" (regexp-opt '("true" "false") t) "\\>")
+          (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
