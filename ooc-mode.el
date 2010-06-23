@@ -93,6 +93,9 @@
              (let ((p (point)))
                 (prog1 (search-forward ")")
                   (search-backward "("))) nil (1 font-lock-variable-name-face)))
+          ;; naive approach, treat |....| as a variable
+          '("|\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>|" 1 font-lock-variable-name-face)
+          ;; Typenames inside of <....> markers
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
