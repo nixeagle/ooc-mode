@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 32
+;;     Update #: 33
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -72,6 +72,8 @@
                 'font-lock-keyword-face)
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
+          '("\\<func\\>" (0 nil)
+            ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>.*)" nil nil (1 font-lock-variable-name-face)))
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" 1 font-lock-function-name-face)
 
