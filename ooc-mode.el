@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 22
+;;     Update #: 25
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -94,6 +94,14 @@
     (modify-syntax-entry ?? "_" table)
     table))
 
+(c-add-style "ooc"
+             '((c-basic-offset . 4)
+               (c-offsets-alist . ((statement-block-intro . +)
+                                   (label . 4)
+                                   ;; Terrible hack to at least close the
+                                   ;; defun on the right position.
+                                   (defun-close . [0])))))
+
 (defvar ooc-mode-syntax-table (ooc-mode-make-syntax-table)
   "Syntax table for `ooc-mode'.")
 
@@ -113,6 +121,7 @@
 ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
   (c-init-language-vars ooc-mode)
   (c-common-init 'ooc-mode)
+  (c-set-style "ooc")
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
   (c-update-modeline))
