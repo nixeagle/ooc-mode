@@ -110,11 +110,6 @@
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
 
-(c-lang-defconst c-stmt-delim-chars
-  ooc "^;{}?:")                         ;these are the defaults
-(c-lang-defconst c-stmt-delim-chars-with-comma
-  ooc "^;,{}?:")                        ; these are the defaults
-
 ;; Lets make all EOL markers equivalent to ';' This variable could have
 ;; been named _something_ better... its not asm here
 (c-lang-defconst c-at-vsemi-p-fn
