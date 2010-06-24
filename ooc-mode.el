@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 52
+;;     Update #: 53
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -51,6 +51,11 @@
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
 
+(defun ooc-kill-line-and-spaces (&optional arg)
+  "Kill and remove any spaces following point."
+  (interactive "P")
+  (kill-line arg)
+  (fixup-whitespace))
 
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
