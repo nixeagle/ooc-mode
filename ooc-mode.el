@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 49
+;;     Update #: 51
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -50,6 +50,16 @@
   (require 'cc-fonts)
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
+
+(defun* ooc-delete-spaces-forward (&optional (position (point)))
+  "Removes spaces from POSITION to eol or next non space."
+  (delete-backward-char
+   (count-matches " " position
+                  (let ((.eol (point-at-eol))
+                        (.next-word-start (forward-whitespace 1)))
+                    (if (< .eol .next-word-start)
+                        .eol .next-word-start)))))
+
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
 
