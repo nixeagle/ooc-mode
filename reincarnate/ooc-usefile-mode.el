@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 1
+;;     Update #: 2
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -44,6 +44,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+
+(defgroup ooc-usefile-mode nil
+  "Settings for ooc usefiles."
+  :group 'ooc-mode)
+
+(defgroup ooc-usefile-mode-faces nil
+  "Faces for ooc usefiles."
+  :group 'ooc-usefile-mode)
+
+(defcustom ooc-usefile-mode-button-mouse-face 'highlight
+  "Face used for mouse highlighting in ooc usefile buffers.
+
+Buttons will be displayed in this face when the mouse cursor is
+above them"
+  :type 'face
+  :group 'ooc-usefile-mode-faces)
 
 (defvar ooc-usefile-mode-font-lock-keywords
   `(("^#.*$" . font-lock-comment-face)
