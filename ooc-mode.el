@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 53
+;;     Update #: 54
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -129,7 +129,11 @@
 (defvar ooc-mode-hook nil
   "Hook to be called after `ooc-mode' is called.")
 
-(defvar ooc-mode-map nil "Keymap for `ooc-mode'.")
+(defvar ooc-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-k") 'ooc-kill-line-and-spaces)
+    map))
+;(defvar ooc-mode-map nil "Keymap for `ooc-mode'.")
 
 (defun ooc-mode-make-syntax-table ()
   (let ((table (make-syntax-table c-mode-syntax-table)))
@@ -168,7 +172,7 @@
   (setq mode-name "ooc")
   (c-initialize-cc-mode t)
   (set-syntax-table ooc-mode-syntax-table)
-  (use-local-map c-mode-map)
+  (use-local-map ooc-mode-map)
 ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
   (c-init-language-vars ooc-mode)
   (c-common-init 'ooc-mode)
