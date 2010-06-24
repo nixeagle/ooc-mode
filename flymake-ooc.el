@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 6
+;;     Update #: 7
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -53,13 +53,24 @@
   :group 'flymake-ooc
   :type 'string)
 
+(defcustom flymake-ooc-rock-command-line-options '("-onlygen")
+  "Commandline options to pass to rock while running flymake.
+
+There are two new rock options added in the 0.9.2 prerelease
+-onlyparse and -onlycheck but these will not be used by this mode
+until they are released. Feel free to customize this variable to
+use them now if you are using the git version of rock."
+  :group 'flymake-ooc
+  :type '(repeat (string)))
+
 (defun flymake-ooc-init ()
   (list flymake-ooc-rock-binary
-        (list "-onlygen"
-              (file-relative-name
-               (flymake-init-create-temp-buffer-copy
-                'flymake-create-temp-inplace)
-               (file-name-directory buffer-file-name)))))
+        (append flymake-ooc-rock-command-line-options
+                (list
+                 (file-relative-name
+                  (flymake-init-create-temp-buffer-copy
+                   'flymake-create-temp-inplace)
+                  (file-name-directory buffer-file-name))))))
 
 (add-to-list 'flymake-allowed-file-name-masks
              '(".+\\.ooc$" flymake-ooc-init))
