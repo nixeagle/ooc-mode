@@ -88,6 +88,11 @@ above them"
   :group 'ooc-usefile-button
   :type 'regexp)
 
+(defun ooc-library-expand-file-name (filename)
+  "Expand FILENAME as an ooc-library."
+  (expand-file-name (concat (file-name-sans-extension filename) ".use")
+                    ooc-library-path))
+
 (defvar ooc-usefile-mode-font-lock-keywords
   `(("^#.*$" . font-lock-comment-face)
     ("^\\([^\\#]*:\\).*"  (1 font-lock-keyword-face))
