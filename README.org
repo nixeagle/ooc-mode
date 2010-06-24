@@ -25,9 +25,9 @@ Emacs major mode for ooc-lang.
 
   Currently working:
 
-  * automatic tab indention (still a few bugs...)
-  * complex syntax highlighting.
-  * With flymake-ooc: instant compiler information seconds after you
+  - automatic tab indention (still a few bugs...)
+  - complex syntax highlighting.
+  - With flymake-ooc: instant compiler information seconds after you
     screwup on a line.
 
 
