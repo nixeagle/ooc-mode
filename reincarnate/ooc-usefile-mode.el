@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 3
+;;     Update #: 5
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -44,6 +44,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.use\\'" . ooc-usefile-mode))
 
 (defgroup ooc-usefile nil
   "Settings for ooc usefiles."
