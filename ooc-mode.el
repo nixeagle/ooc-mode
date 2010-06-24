@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 48
+;;     Update #: 49
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -48,7 +48,7 @@
 (eval-when-compile
   (require 'cc-langs)
   (require 'cc-fonts)
-
+  (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
