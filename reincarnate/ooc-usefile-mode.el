@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 2
+;;     Update #: 3
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -45,21 +45,48 @@
 ;;
 ;;; Code:
 
-(defgroup ooc-usefile-mode nil
+(defgroup ooc-usefile nil
   "Settings for ooc usefiles."
   :group 'ooc-mode)
 
-(defgroup ooc-usefile-mode-faces nil
+(defgroup ooc-usefile-faces nil
   "Faces for ooc usefiles."
-  :group 'ooc-usefile-mode)
+  :group 'ooc-usefile)
 
-(defcustom ooc-usefile-mode-button-mouse-face 'highlight
+(defgroup ooc-usefile-regexp nil
+  "Regexps used in ooc usefile buffers."
+  :group 'ooc-usefile)
+(defgroup ooc-usefile-button nil
+  "Settings for buttons in ooc usefiles."
+  :group 'ooc-usefile)
+
+(defface ooc-usefile-button '((t))
+  "Usefile button face."
+  :group 'ooc-usefile-faces)
+
+(defcustom ooc-usefile-button-face 'ooc-usefile-button
+  "Face for highlighting buttons in usefile buffers.
+
+A button is a piece of text that you can activate by pressing
+`RET' or `mouse-2' above it. See also
+`ooc-usefile-mode-keymap'."
+  :type 'face
+  :group 'ooc-usefile-faces)
+
+(defcustom ooc-usefile-button-mouse-face 'highlight
   "Face used for mouse highlighting in ooc usefile buffers.
 
 Buttons will be displayed in this face when the mouse cursor is
 above them"
   :type 'face
-  :group 'ooc-usefile-mode-faces)
+  :group 'ooc-usefile-faces)
+
+(defcustom ooc-usefile-button-requires-regexp
+  "\\([^\s]\\)"
+  "Matches valid library names to require."
+  :group 'ooc-usefile-regexp
+  :group 'ooc-usefile-button
+  :type 'regexp)
 
 (defvar ooc-usefile-mode-font-lock-keywords
   `(("^#.*$" . font-lock-comment-face)
