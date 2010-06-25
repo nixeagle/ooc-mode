@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 56
+;;     Update #: 57
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -54,7 +54,7 @@
 (defgroup ooc-mode nil
   "Settings for ooc-mode.")
 
-(defcustom ooc-library-path (or (getenv "OOC_LIBS") "/usr/lib/ooc")
+(defcustom ooc-library-path (or (getenv "OOC_LIBS") "/usr/lib/ooc/")
   "Location of ooc-libraries.
 
 If the environment variable OOC_LIBS is set, the value of that is
