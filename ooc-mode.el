@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 57
+;;     Update #: 60
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -51,7 +51,7 @@
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
 
-(defgroup ooc-mode nil
+(defgroup ooc nil
   "Settings for ooc-mode.")
 
 (defcustom ooc-library-path (or (getenv "OOC_LIBS") "/usr/lib/ooc/")
@@ -59,7 +59,7 @@
 
 If the environment variable OOC_LIBS is set, the value of that is
 used, otherwise we default to /usr/lib/ooc/."
-  :group 'ooc-mode
+  :group 'ooc
   :type 'directory)
 
 (defun ooc-kill-line-and-spaces (&optional arg)

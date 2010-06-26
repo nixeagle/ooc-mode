@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 8
+;;     Update #: 9
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -49,7 +49,8 @@
 
 (defgroup flymake-ooc nil
   "Flymake for ooc."
-  :group 'flymake)
+  :group 'flymake
+  :group 'ooc)
 (defcustom flymake-ooc-rock-binary "rock"
   "Location of the rock compiler executable."
   :group 'flymake-ooc
