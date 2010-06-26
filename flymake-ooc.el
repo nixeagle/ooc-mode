@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 7
+;;     Update #: 8
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -45,6 +45,8 @@
 ;;
 ;;; Code:
 (require 'flymake)
+(require 'ooc-mode)
+
 (defgroup flymake-ooc nil
   "Flymake for ooc."
   :group 'flymake)
