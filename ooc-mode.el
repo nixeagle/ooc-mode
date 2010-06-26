@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 60
+;;     Update #: 61
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -194,6 +194,16 @@ used, otherwise we default to /usr/lib/ooc/."
   (run-hooks 'ooc-mode-hook)
   (c-update-modeline))
 
+
+;;;###autoload
+(defun reload-all-ooc-libraries ()
+  "Reload all related ooc libraries.
+
+This is a development helper function and assumes all the related
+libraries are in `load-path'."
+  (interactive)
+  (load-library "ooc-mode")
+  (load-library "flymake-ooc"))
 
 (provide 'ooc-mode)
 
