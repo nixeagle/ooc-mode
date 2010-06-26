@@ -205,6 +205,11 @@ libraries are in `load-path'."
   (load-library "ooc-mode")
   (load-library "flymake-ooc"))
 
+(defun ooc-reindent-buffer ()
+  "Reindent the current buffer using smart ooc indention."
+  (interactive)
+  (indent-region (buffer-end -1) (buffer-end 1)))
+
 (provide 'ooc-mode)
 
 
