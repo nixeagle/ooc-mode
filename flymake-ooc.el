@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 9
+;;     Update #: 12
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -80,6 +80,12 @@ use them now if you are using the git version of rock."
 
 (add-to-list 'flymake-err-line-patterns
              '("^\\(.*\\):\\([0-9]+\\):\\([0-9]+\\) \\[[^\]]+\\] \\(.*\\)" 1 2 3 4))
+
+(defun enable-flymake-ooc-mode ()
+  "Turn flymake-ooc on no matter what."
+  (flymake-mode 1))
+
+(custom-add-frequent-value 'ooc-mode-hook 'enable-flymake-ooc-mode)
 
 ;;;###autoload
 (defun flymake-ooc-mode ()
