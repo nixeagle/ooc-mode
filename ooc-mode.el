@@ -137,8 +137,10 @@ used, otherwise we default to /usr/lib/ooc/."
 (c-lang-defconst c-at-vsemi-p-fn
   ooc (lambda (&optional pos) t))
 
-(defvar ooc-mode-hook nil
-  "Hook to be called after `ooc-mode' is called.")
+(defcustom ooc-mode-hook nil
+  "Hook to be called after `ooc-mode' is called."
+  :type 'hook
+  :group 'ooc)
 
 (defvar ooc-mode-map
   (let ((map (make-sparse-keymap)))
