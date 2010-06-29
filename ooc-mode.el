@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 61
+;;     Update #: 64
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -203,7 +203,8 @@ This is a development helper function and assumes all the related
 libraries are in `load-path'."
   (interactive)
   (load-library "ooc-mode")
-  (load-library "flymake-ooc"))
+  (load-library "flymake-ooc")
+  (load-library "ooc-usefile-mode"))
 
 (defun ooc-reindent-buffer ()
   "Reindent the current buffer using smart ooc indention."
