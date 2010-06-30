@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 64
+;;     Update #: 68
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -68,6 +68,11 @@ used, otherwise we default to /usr/lib/ooc/."
   (kill-line arg)
   (fixup-whitespace))
 
+(defconst ooc-syntax-identifier-regex
+  "\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>"
+  "Regexp matching valid ooc identifiers.
+
+These cover classes, functions, templates, and variables.")
 
 (defconst ooc-font-lock-keywords-1 (c-lang-const c-matchers-1 ooc))
 
@@ -96,22 +101,25 @@ used, otherwise we default to /usr/lib/ooc/."
           (cons (concat "\\<" (regexp-opt '("true" "false" "null") t) "\\>")
                 'font-lock-constant-face)
           ;; handle the func type
-          '("\\<Func\\> (\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\><" 1 font-lock-type-face)
-          '("\\<func\\> *\\(~\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>\\)? *(" (0 nil)
+          `(,(concat "\\<Func\\> (\\(" ooc-syntax-identifier-regex "\\)<")
+                1 font-lock-type-face)
+          `(,(concat "\\<func\\> *\\(~" ooc-syntax-identifier-regex "\\)? *(")
+                    (0 nil)
             ;; Mark anything following a : as a type.
-            ("\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>: *\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)"
+            (,(concat ooc-syntax-identifier-regex ": *\\("
+                      ooc-syntax-identifier-regex "\\)")
              (let ((p (point)))
                (prog1 (search-forward-regexp ")\\|$")
                  (search-backward "("))) nil (1 font-lock-type-face))
             ;; Mark generics as a type.
-            ("<\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>>"
+            (,(concat "\\(" ooc-syntax-identifier-regex "\\)>")
              (let ((p (point)))
                (prog1 (search-forward-regexp ")\\|$")
                  (search-backward "("))) nil (1 font-lock-type-face))
 
 
             ;; Mark signle words not yet highlighted as variables
-            ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
+            (,(concat "\\(" ooc-syntax-identifier-regex "\\)")
              (let ((p (point)))
                (prog1 (search-forward ")")
                   (search-backward "("))) nil (1 font-lock-variable-name-face)))
