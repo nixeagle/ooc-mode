@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 69
+;;     Update #: 72
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -84,9 +84,8 @@ These cover classes, functions, templates, and variables.")
 (progn
   (c-lang-defconst c-matchers-3
     ooc (append
-         ;(c-lang-const c-matchers-3)
+                                       ;;(c-lang-const c-matchers-3)
          (list
-          '("^///.*" 0 font-lock-doc-face t)
           (cons (concat "\\<"
                         (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
                                       "super" "const" "static" "include"
@@ -102,9 +101,9 @@ These cover classes, functions, templates, and variables.")
                 'font-lock-constant-face)
           ;; handle the func type
           `(,(concat "\\<Func\\> (\\(" ooc-syntax-identifier-regex "\\)<")
-                1 font-lock-type-face)
+            1 font-lock-type-face)
           `(,(concat "\\<func\\> *\\(~" ooc-syntax-identifier-regex "\\)? *(")
-                    (0 nil)
+            (0 nil)
             ;; Mark anything following a : as a type.
             (,(concat ooc-syntax-identifier-regex ": *\\("
                       ooc-syntax-identifier-regex "\\)")
@@ -122,7 +121,7 @@ These cover classes, functions, templates, and variables.")
             (,(concat "\\(" ooc-syntax-identifier-regex "\\)")
              (let ((p (point)))
                (prog1 (search-forward ")")
-                  (search-backward "("))) nil (1 font-lock-variable-name-face)))
+                 (search-backward "("))) nil (1 font-lock-variable-name-face)))
 
           ;; naive approach, treat |....| as a variable
           '("|[0-9a-zA-Z_\\!\\? ,]*|" (0 nil)
@@ -131,7 +130,7 @@ These cover classes, functions, templates, and variables.")
 
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\) *:=" 1 font-lock-variable-name-face)
 
-         ; (print (format "a"))
+                                        ; (print (format "a"))
           ;; variable declarations, start of line
 
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" (1 font-lock-function-name-face))
@@ -183,6 +182,17 @@ These cover classes, functions, templates, and variables.")
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.ooc\\'" . ooc-mode))
 
+(defun ooc-font-lock-syntactic-face-function (state)
+  (let* ((start-pos (nth 8 state))
+         (look-end-pos (if (< (buffer-end 1) (+ 3 start-pos))
+                           (buffer-end 1)
+                         (+ 3 start-pos)))
+         (comment-start-chars (buffer-substring start-pos look-end-pos)))
+    (cond
+     ((string= comment-start-chars "///") 'font-lock-doc-face)
+     ((string= comment-start-chars "/**") 'font-lock-doc-face)
+     (t (if (nth 3 state) font-lock-string-face font-lock-comment-face)))))
+
 ;;;###autoload
 (defun ooc-mode ()
   "Major mode for editing ooc files."
@@ -191,10 +201,12 @@ These cover classes, functions, templates, and variables.")
   ;; Setup environment things
   (setq major-mode 'ooc-mode)
   (setq mode-name "ooc")
+  (set (make-local-variable 'font-lock-syntactic-face-function)
+       'ooc-font-lock-syntactic-face-function)
   (c-initialize-cc-mode t)
   (set-syntax-table ooc-mode-syntax-table)
   (use-local-map ooc-mode-map)
-;  (put 'ooc-mode 'c-mode-prefix "ooc-")
+                                        ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
   (c-init-language-vars ooc-mode)
   (c-common-init 'ooc-mode)
   (c-set-style "ooc")
