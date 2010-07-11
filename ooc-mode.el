@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 76
+;;     Update #: 77
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -114,7 +114,7 @@ These cover classes, functions, templates, and variables.")
                                       "implement" "override" "if" "else" "for" "while"
                                       "do" "switch" "case" "version" "return" "ctype"
                                       "typedef" "use" "extends" "enum"
-                                      "as" "in"
+                                      "as" "in" "match"
                                       ) t)
                         "\\>")
                 'font-lock-keyword-face)
