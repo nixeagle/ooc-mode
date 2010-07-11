@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 72
+;;     Update #: 75
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -193,6 +193,19 @@ These cover classes, functions, templates, and variables.")
      ((string= comment-start-chars "/**") 'font-lock-doc-face)
      (t (if (nth 3 state) font-lock-string-face font-lock-comment-face)))))
 
+(defun ooc-last-line-import-statement-p ()
+  ;; Semi fix to the issue, We need to make sure that other toplevel
+  ;; statements like comments or strings don't happen to confuse us about
+  ;; statement-cont status.
+  (looking-back "import.*[\n\s]*" (- (point) 200)))
+
+(defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
+  (cond
+   ((ooc-last-line-import-statement-p)
+    (c-indent-line (or syntax '((c-topmost-intro)))
+                   quiet ignore-point-pos))
+   (t (c-indent-line syntax quiet ignore-point-pos))))
+
 ;;;###autoload
 (defun ooc-mode ()
   "Major mode for editing ooc files."
@@ -203,12 +216,16 @@ These cover classes, functions, templates, and variables.")
   (setq mode-name "ooc")
   (set (make-local-variable 'font-lock-syntactic-face-function)
        'ooc-font-lock-syntactic-face-function)
+
   (c-initialize-cc-mode t)
   (set-syntax-table ooc-mode-syntax-table)
   (use-local-map ooc-mode-map)
                                         ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
   (c-init-language-vars ooc-mode)
   (c-common-init 'ooc-mode)
+  ;; Might be some c-mode way to do this....
+  (set (make-local-variable 'indent-line-function)
+       'ooc-indent-line)
   (c-set-style "ooc")
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
