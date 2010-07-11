@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 68
+;;     Update #: 69
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -83,10 +83,10 @@ These cover classes, functions, templates, and variables.")
 
 (progn
   (c-lang-defconst c-matchers-3
-
     ooc (append
          ;(c-lang-const c-matchers-3)
          (list
+          '("^///.*" 0 font-lock-doc-face t)
           (cons (concat "\\<"
                         (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
                                       "super" "const" "static" "include"
