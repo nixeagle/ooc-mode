@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 13
+;;     Update #: 14
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -66,9 +66,16 @@ use them now if you are using the git version of rock."
   :group 'flymake-ooc
   :type '(repeat (string)))
 
+(defun flymake-ooc-get-command-line-options ()
+  (let ((project (ooc-find-root-project)))
+    (if project
+        (destructuring-bind (name path command-opts &rest remaining) project
+          command-opts)
+      flymake-ooc-rock-command-line-options)))
+
 (defun flymake-ooc-init ()
   (list flymake-ooc-rock-binary
-        (append flymake-ooc-rock-command-line-options
+        (append (flymake-ooc-get-command-line-options)
                 (list
                  (file-relative-name
                   (flymake-init-create-temp-buffer-copy
