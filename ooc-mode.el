@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 75
+;;     Update #: 76
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -54,6 +54,9 @@
 (defgroup ooc nil
   "Settings for ooc-mode.")
 
+(defgroup ooc-project nil
+  "Project settings for ooc-mode.")
+
 (defcustom ooc-library-path (or (getenv "OOC_LIBS") "/usr/lib/ooc/")
   "Location of ooc-libraries.
 
@@ -61,6 +64,24 @@ If the environment variable OOC_LIBS is set, the value of that is
 used, otherwise we default to /usr/lib/ooc/."
   :group 'ooc
   :type 'directory)
+
+(defcustom ooc-projects nil
+  "Paths to project rood directories."
+  :group 'ooc-project
+  :type '(repeat (list :tag "Project"
+                       (string :tag "Name")
+                       (directory :tag "Root")
+                       (repeat :tag "Rock Options"
+                               (string :tag "Option")))))
+
+(defun* ooc-find-root-project
+    (&optional (directory (buffer-file-name (current-buffer))))
+  "Return first applicable project for the given directory."
+  (loop for project in ooc-projects
+        when (destructuring-bind (name path &rest remaining) project
+                  (search (file-truename path) directory
+                          :end2 (length (file-truename path))))
+        return project))
 
 (defun ooc-kill-line-and-spaces (&optional arg)
   "Kill and remove any spaces following point."
