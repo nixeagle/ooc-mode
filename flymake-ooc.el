@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 14
+;;     Update #: 16
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -70,17 +70,29 @@ use them now if you are using the git version of rock."
   (let ((project (ooc-find-root-project)))
     (if project
         (destructuring-bind (name path command-opts &rest remaining) project
-          command-opts)
+          (mapcar (lambda (option)
+                    (flymake-ooc-make-absolute-path-option option (file-truename path))) (append command-opts flymake-ooc-rock-command-line-options)))
       flymake-ooc-rock-command-line-options)))
 
+(defun flymake-ooc-make-absolute-path-option (option root)
+  ;; Mostly a hack for oos issues with sourcepath. This can be updated to
+  ;; make any rock option absolute instead of relative.
+  (if (search "-sourcepath=" option)
+      (concat "-sourcepath="
+              (expand-file-name (substring option (length "-sourcepath="))
+                                root))
+    option))
 (defun flymake-ooc-init ()
-  (list flymake-ooc-rock-binary
-        (append (flymake-ooc-get-command-line-options)
-                (list
-                 (file-relative-name
-                  (flymake-init-create-temp-buffer-copy
-                   'flymake-create-temp-inplace)
-                  (file-name-directory buffer-file-name))))))
+  (append (list flymake-ooc-rock-binary
+         (append (flymake-ooc-get-command-line-options)
+                 (list (concat "-sourcepath=" (file-name-directory buffer-file-name)))
+                 (list
+                  (file-relative-name
+                   (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-inplace)
+                   (file-name-directory buffer-file-name))))
+         (and (ooc-find-root-project)
+              (second (ooc-find-root-project))))))
 
 (add-to-list 'flymake-allowed-file-name-masks
              '(".+\\.ooc$" flymake-ooc-init))
