@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 16
+;;     Update #: 17
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -85,7 +85,7 @@ use them now if you are using the git version of rock."
 (defun flymake-ooc-init ()
   (append (list flymake-ooc-rock-binary
          (append (flymake-ooc-get-command-line-options)
-                 (list (concat "-sourcepath=" (file-name-directory buffer-file-name)))
+                 (list (concat "-sourcepath=."))
                  (list
                   (file-relative-name
                    (flymake-init-create-temp-buffer-copy
