@@ -34,6 +34,35 @@ Emacs major mode for ooc-lang.
   - With flymake-ooc: instant compiler information seconds after you
     screwup on a line.
 
+** Projects
+   ooc-mode supports "projects". Right now this means syntax checking
+   works properly even when including and using functions from a complex
+   project with multiple source directories like [[http://github.com/tsion/oos][oos]].
+
+   Due to a rock bug with symlinks, it is imperative that you be using a
+   rock version from git to use this feature! Make sure your version of
+   rock is at or newer then [[http://github.com/nddrylliog/rock/commit/03c0478fab76dfec61593b39871d3b071d312462][nddrylliog/rock revision: 03c0478]].
+
+   To set this up:
+   - =M-x customize-option RET ooc-projects RET=
+   - Add a project name, whatever you like is good here.
+   - Add a project root directory. This should be a directory leading to
+     the base or top level of your project. Whatever you call it, it is
+     generally where your copyright licenses and README goes.
+   - Add rock options by clicking the nearby insert button and filling in
+     the blanks.
+     - To refer to related include modules for the project supply
+       =-sourcepath=Path/To/Include=. Keep these relative to your root
+       directory.
+     - If you have an ooc sdk library be sure to add this as a sourcepath
+       as well. Currently flymake-ooc will recognize and properly handle
+       =-sourcepath=<stuff>= paths. Please file feature requests for
+       additional path options as rock adds more, or you find one missing
+       here.
+   - Open a file inside your project and in that buffer do:
+     =M-x flymake-ooc-init=. Provided the configuration is correct and you
+     are using a recent rock from git syntax checking work project wide.
+
 
 * Bugs, issues, problems...
 
