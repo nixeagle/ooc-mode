@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 95
+;;     Update #: 97
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -191,21 +191,55 @@ These cover classes, functions, templates, and variables.")
 
 (c-add-style "ooc"
              '((c-basic-offset . 4)
-               (c-offsets-alist . ((statement-block-intro . +)
-                                   (label . 4)
-                                   (case-label . 4)
-                                   (statement-cont . c-lineup-topmost-intro-cont)
-                                   ;; Terrible hack to at least close the
-                                   ;; defun on the right position.
-                                   (defun-close . [0])
-                                   ;; TODO: This needs indent to [19] if
-                                   ;; it is not an anonymous function
-                                   ;; embedded in an arglist. We can tell
-                                   ;; this by looking for |...| just after
-                                   ;; a ',' char.
-                                   (arglist-cont-nonempty . +)
-                                   (arglist-close . 0)))))
+               (c-offsets-alist
+                .
+                ((label . 4)
+                 (case-label . 4)
+                 (statement-cont . c-lineup-topmost-intro-cont)
+                 ;; Terrible hack to at least close the
+                 ;; defun on the right position.
+                 (defun-close . [0])
+                 ;; TODO: This needs indent to [19] if
+                 ;; it is not an anonymous function
+                 ;; embedded in an arglist. We can tell
+                 ;; this by looking for |...| just after
+                 ;; a ',' char.
+                 (arglist-cont-nonempty . +)
+                 (topmost-intro .
+                                (first ooc-lineup-oneline-if-statement
+                                       ooc-lineup-oneline-else-statement
+                                       0))
+                 (else-clause . (first ooc-lineup-oneline-else-clause
+                                       0))
+                 (statement . (first ooc-lineup-oneline-if-statement
+                                     ooc-lineup-oneline-else-statement
+                                     0))
+                 (arglist-close . 0)))))
+(defun ooc-lineup-oneline-if-statement (langelem)
+  (save-excursion
+    (when (looking-back "if\s*([^)]*)\s*\n.*")
+      '+)))
 
+(defun ooc-lineup-oneline-else-statement (langelem)
+  (save-excursion
+    (save-excursion
+      (print (list (point)
+                   (c-langelem-pos langelem)
+                   (c-langelem-col langelem)
+                   (c-langelem-2nd-pos langelem)
+                   c-state-cache)))
+    (cond
+     ((looking-back "else\s*\n.*") '+)
+     ((save-excursion
+        ;; Go back a level if last anchor is for a oneline else statement.
+        (goto-char (c-langelem-pos langelem))
+        (looking-back "else\s*\n.*")) '-))))
+
+(defun ooc-lineup-oneline-else-clause (langelem)
+  (save-excursion
+    (beginning-of-line)
+    (when (looking-at-p "\s*else\s*$")
+      '-)))
 (defvar ooc-mode-syntax-table (ooc-mode-make-syntax-table)
   "Syntax table for `ooc-mode'.")
 
@@ -235,18 +269,16 @@ These cover classes, functions, templates, and variables.")
 (defun ooc-syntax-in-match/case-case-p ()
   (looking-back "case\s*[^=\n]*\s*=>\s*\n.*" (- (point) 200)))
 
+
 (defun* ooc-backwards-string-indent-level (string &optional (point (point))
                                                   (limit 200))
   (save-excursion
     (save-match-data
-      (- (search-backward string (- point limit))
+      (- (search-backward-regexp string (- point limit))
          (line-beginning-position)))))
 
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
-   ((ooc-syntax-in-oneline-conditional-p)
-    (c-indent-line (or syntax '((statement-block-intro)))
-                   quiet ignore-point-pos))
    ((ooc-syntax-in-match/case-case-p)
     (c-indent-line (or syntax
                        `((brace-list-intro
