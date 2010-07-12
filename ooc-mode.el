@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 98
+;;     Update #: 99
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -71,7 +71,7 @@ used, otherwise we default to /usr/lib/ooc/."
   :type 'directory)
 
 (defcustom ooc-projects nil
-  "Paths to project rood directories."
+  "Paths to project root directories."
   :group 'ooc-project
   :type '(repeat (list :tag "Project"
                        (string :tag "Name")
