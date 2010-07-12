@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 97
+;;     Update #: 98
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -222,12 +222,6 @@ These cover classes, functions, templates, and variables.")
 
 (defun ooc-lineup-oneline-else-statement (langelem)
   (save-excursion
-    (save-excursion
-      (print (list (point)
-                   (c-langelem-pos langelem)
-                   (c-langelem-col langelem)
-                   (c-langelem-2nd-pos langelem)
-                   c-state-cache)))
     (cond
      ((looking-back "else\s*\n.*") '+)
      ((save-excursion
