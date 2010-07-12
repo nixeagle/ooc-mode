@@ -83,6 +83,23 @@ Emacs major mode for ooc-lang.
    Please understand this whole snippets thing is alpha quality and may
    break unexpectedly in future updates until v0.3 is released.
 
+*** Current templates
+    Just a little example of what is created so far. The expansions here
+    may not be the same as what current HEAD has, but the general forms
+    will remain the same. The name you type before hitting tab to expand a
+    template is the header of each grouping below.
+**** class
+    : <classname>: class {
+    :     <your code here>
+    : }
+**** cover
+    : <covername>: cover {
+    :     <your code here>
+    : }
+**** func
+    : <funcnamehere>: func -> <typehere> {
+    :     <your code here>
+    : }
 * Bugs, issues, problems...
 
   Please use the issues tab to report any issues.
