@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 20
+;;     Update #: 22
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -47,14 +47,8 @@
 (require 'flymake)
 (require 'ooc-mode)
 
-(defgroup flymake-ooc nil
-  "Flymake for ooc."
-  :group 'flymake
-  :group 'ooc)
-(defcustom flymake-ooc-rock-binary "rock"
-  "Location of the rock compiler executable."
-  :group 'flymake-ooc
-  :type 'string)
+
+
 
 (defcustom flymake-ooc-rock-command-line-options '("-onlycheck")
   "Commandline options to pass to rock while running flymake.
@@ -91,8 +85,8 @@ use them now if you are using the git version of rock."
                    (flymake-init-create-temp-buffer-copy
                     'flymake-create-temp-inplace)
                    (file-name-directory buffer-file-name))))
-         (and (ooc-find-root-project)
-              (second (ooc-find-root-project))))))
+         ))
+  )
 
 (add-to-list 'flymake-allowed-file-name-masks
              '(".+\\.ooc$" flymake-ooc-init))

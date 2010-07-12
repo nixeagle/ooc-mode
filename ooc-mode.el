@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 84
+;;     Update #: 86
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -56,6 +56,11 @@
 
 (defgroup ooc-project nil
   "Project settings for ooc-mode.")
+
+(defgroup flymake-ooc nil
+  "Flymake for ooc."
+  :group 'flymake
+  :group 'ooc)
 
 (defcustom ooc-library-path (or (getenv "OOC_LIBS") "/usr/lib/ooc/")
   "Location of ooc-libraries.
@@ -292,6 +297,19 @@ libraries are in `load-path'."
   "Reindent the current buffer using smart ooc indention."
   (interactive)
   (indent-region (buffer-end -1) (buffer-end 1)))
+
+;; run a program
+(defcustom flymake-ooc-rock-binary "rock"
+  "DEPRECIATED! Location of the rock compiler executable.
+
+Please use `ooc-rock-binary'."
+  :group 'flymake-ooc
+  :type 'string)
+
+(defcustom ooc-rock-binary flymake-ooc-rock-binary
+  "Location of the rock compiler executable."
+  :group 'ooc
+  :type 'string)
 
 (provide 'ooc-mode)
 
