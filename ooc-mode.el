@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 79
+;;     Update #: 83
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -187,6 +187,7 @@ These cover classes, functions, templates, and variables.")
              '((c-basic-offset . 4)
                (c-offsets-alist . ((statement-block-intro . +)
                                    (label . 4)
+                                   (case-label . 4)
                                    ;; Terrible hack to at least close the
                                    ;; defun on the right position.
                                    (defun-close . [0])
@@ -224,6 +225,9 @@ These cover classes, functions, templates, and variables.")
 (defun ooc-syntax-in-oneline-conditional-p ()
   (looking-back "\\(if\s*(.*)\\|else\\)\s*\n+.*" (- (point) 200)))
 
+(defun ooc-syntax-in-match/case-case-p ()
+  (looking-back "case\s*[^=\n]*\s*=>\s*\n.*" (- (point) 200)))
+
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
    ((ooc-last-line-import-statement-p)
@@ -231,6 +235,17 @@ These cover classes, functions, templates, and variables.")
                    quiet ignore-point-pos))
    ((ooc-syntax-in-oneline-conditional-p)
     (c-indent-line (or syntax '((statement-block-intro)))
+                   quiet ignore-point-pos))
+   ((ooc-syntax-in-match/case-case-p)
+    (c-indent-line (or syntax
+                       `((brace-list-intro
+                          ,(save-excursion
+                            (save-match-data
+                              (let* ((p (point))
+                                     (case-at (search-backward "case" (- (point) 200)))
+                                     (indent-level (- case-at (line-beginning-position))))
+                                (goto-char p)
+                                (+ (line-beginning-position) indent-level)))))))
                    quiet ignore-point-pos))
    (t (c-indent-line syntax quiet ignore-point-pos))))
 
