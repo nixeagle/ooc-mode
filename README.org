@@ -8,8 +8,10 @@ Emacs major mode for ooc-lang.
   : cd ooc-mode/ && pwd
 
   Edit your =~/.emacs= or =~/.emacs.d/init.el= (whichever you have) with
-  emacs and include the line:
+  emacs and include the lines:
   : (add-to-list 'load-path "<output of pwd above>")
+  : (require 'ooc-mode)
+  : (require 'flymake-ooc)
 
   Tell emacs to reload that buffer with:
   : M-x eval-buffer RET
