@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 90
+;;     Update #: 91
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -244,7 +244,7 @@ These cover classes, functions, templates, and variables.")
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
    ((ooc-last-line-import-statement-p)
-    (c-indent-line (or syntax '((c-topmost-intro)))
+    (c-indent-line (or syntax '((topmost-intro)))
                    quiet ignore-point-pos))
    ((ooc-syntax-in-oneline-conditional-p)
     (c-indent-line (or syntax '((statement-block-intro)))
