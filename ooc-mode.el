@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 78
+;;     Update #: 79
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -221,10 +221,16 @@ These cover classes, functions, templates, and variables.")
   ;; statement-cont status.
   (looking-back "import.*[\n\s]*" (- (point) 200)))
 
+(defun ooc-syntax-in-oneline-conditional-p ()
+  (looking-back "\\(if\s*(.*)\\|else\\)\s*\n+.*" (- (point) 200)))
+
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
    ((ooc-last-line-import-statement-p)
     (c-indent-line (or syntax '((c-topmost-intro)))
+                   quiet ignore-point-pos))
+   ((ooc-syntax-in-oneline-conditional-p)
+    (c-indent-line (or syntax '((statement-block-intro)))
                    quiet ignore-point-pos))
    (t (c-indent-line syntax quiet ignore-point-pos))))
 
