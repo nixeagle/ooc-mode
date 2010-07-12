@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 88
+;;     Update #: 89
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -179,6 +179,7 @@ These cover classes, functions, templates, and variables.")
 (defvar ooc-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-k") 'ooc-kill-line-and-spaces)
+    (define-key map (kbd "C-c C-r") 'ooc-run-single-file)
     map))
 ;(defvar ooc-mode-map nil "Keymap for `ooc-mode'.")
 
@@ -328,6 +329,7 @@ use them now if you are using the git version of rock."
     (with-current-buffer (get-buffer-create "*ooc rock output*")
       (erase-buffer)
       (insert (shell-command-to-string (concat ooc-rock-binary " -r " file)))
+      (delete-file (file-name-sans-extension file) t)
       (pop-to-buffer "*ooc rock output*"))))
 
 (provide 'ooc-mode)
