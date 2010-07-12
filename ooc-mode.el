@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 91
+;;     Update #: 92
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -226,7 +226,7 @@ These cover classes, functions, templates, and variables.")
   ;; Semi fix to the issue, We need to make sure that other toplevel
   ;; statements like comments or strings don't happen to confuse us about
   ;; statement-cont status.
-  (looking-back "import.*[\n\s]*" (- (point) 200)))
+  (looking-back "import.*[\n\s]*\n.*" (- (point) 200)))
 
 (defun ooc-syntax-in-oneline-conditional-p ()
   (looking-back "\\(if\s*(.*)\\|else\\)\s*\n+.*" (- (point) 200)))
