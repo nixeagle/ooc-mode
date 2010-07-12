@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 89
+;;     Update #: 90
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -329,7 +329,7 @@ use them now if you are using the git version of rock."
     (with-current-buffer (get-buffer-create "*ooc rock output*")
       (erase-buffer)
       (insert (shell-command-to-string (concat ooc-rock-binary " -r " file)))
-      (delete-file (file-name-sans-extension file) t)
+      (delete-file (file-name-sans-extension file))
       (pop-to-buffer "*ooc rock output*"))))
 
 (provide 'ooc-mode)
