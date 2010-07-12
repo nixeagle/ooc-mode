@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: function
+# key: fun
+# contributor: nixeagle
+# --
+${1:myFunc}: func -> ${2:Int} {
+    $0
+}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: class
+# key: class
+# contributor: nixeagle
+# --
+${1:MyClass}: class {
+    $0
+}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: cover
+# key: cover
+# contributor: nixeagle
+# --
+${1:MyCover}: cover {
+    $0
+}
