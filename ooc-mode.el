@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 92
+;;     Update #: 95
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -194,6 +194,7 @@ These cover classes, functions, templates, and variables.")
                (c-offsets-alist . ((statement-block-intro . +)
                                    (label . 4)
                                    (case-label . 4)
+                                   (statement-cont . c-lineup-topmost-intro-cont)
                                    ;; Terrible hack to at least close the
                                    ;; defun on the right position.
                                    (defun-close . [0])
@@ -243,9 +244,6 @@ These cover classes, functions, templates, and variables.")
 
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
-   ((ooc-last-line-import-statement-p)
-    (c-indent-line (or syntax '((topmost-intro)))
-                   quiet ignore-point-pos))
    ((ooc-syntax-in-oneline-conditional-p)
     (c-indent-line (or syntax '((statement-block-intro)))
                    quiet ignore-point-pos))
