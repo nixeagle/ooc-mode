@@ -20,7 +20,7 @@ Emacs major mode for ooc-lang.
   have flymake support, be sure to do:
   : M-x load-library RET flymake-ooc RET
 
-  Then turn flymake on as normal with: =M-x flymake RET=.
+  Then turn flymake on as normal with: =M-x flymake-ooc-init RET=.
 
 
 * Features
