@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 17
+;;     Update #: 20
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -56,7 +56,7 @@
   :group 'flymake-ooc
   :type 'string)
 
-(defcustom flymake-ooc-rock-command-line-options '("-onlygen")
+(defcustom flymake-ooc-rock-command-line-options '("-onlycheck")
   "Commandline options to pass to rock while running flymake.
 
 There are two new rock options added in the 0.9.2 prerelease
