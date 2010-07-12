@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 86
+;;     Update #: 88
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -310,6 +310,25 @@ Please use `ooc-rock-binary'."
   "Location of the rock compiler executable."
   :group 'ooc
   :type 'string)
+
+(defcustom flymake-ooc-rock-command-line-options '("-onlycheck")
+  "Commandline options to pass to rock while running flymake.
+
+There are two new rock options added in the 0.9.2 prerelease
+-onlyparse and -onlycheck but these will not be used by this mode
+until they are released. Feel free to customize this variable to
+use them now if you are using the git version of rock."
+  :group 'flymake-ooc
+  :type '(repeat (string)))
+
+(defun ooc-run-single-file ()
+  "Run file in current buffer."
+  (interactive)
+  (let ((file (file-name-nondirectory (buffer-file-name (current-buffer)))))
+    (with-current-buffer (get-buffer-create "*ooc rock output*")
+      (erase-buffer)
+      (insert (shell-command-to-string (concat ooc-rock-binary " -r " file)))
+      (pop-to-buffer "*ooc rock output*"))))
 
 (provide 'ooc-mode)
 

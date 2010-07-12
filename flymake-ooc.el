@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 22
+;;     Update #: 23
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -50,15 +50,7 @@
 
 
 
-(defcustom flymake-ooc-rock-command-line-options '("-onlycheck")
-  "Commandline options to pass to rock while running flymake.
 
-There are two new rock options added in the 0.9.2 prerelease
--onlyparse and -onlycheck but these will not be used by this mode
-until they are released. Feel free to customize this variable to
-use them now if you are using the git version of rock."
-  :group 'flymake-ooc
-  :type '(repeat (string)))
 
 (defun flymake-ooc-get-command-line-options ()
   (let ((project (ooc-find-root-project)))
