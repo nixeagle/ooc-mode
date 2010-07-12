@@ -16,11 +16,7 @@ Emacs major mode for ooc-lang.
   Tell emacs to reload that buffer with:
   : M-x eval-buffer RET
 
-  Now just open any ooc file and emacs will use ooc-mode. If you want to
-  have flymake support, be sure to do:
-  : M-x load-library RET flymake-ooc RET
-
-  Then turn flymake on as normal with: =M-x flymake-ooc-init RET=.
+  Turn flymake ooc on as normal with: =M-x flymake-ooc-mode RET=.
 
 
 * Features
