@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 99
+;;     Update #: 103
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -281,31 +281,6 @@ These cover classes, functions, templates, and variables.")
                    quiet ignore-point-pos))
    (t (c-indent-line syntax quiet ignore-point-pos))))
 
-;;;###autoload
-(defun ooc-mode ()
-  "Major mode for editing ooc files."
-  (interactive)
-  (kill-all-local-variables)
-  ;; Setup environment things
-  (setq major-mode 'ooc-mode)
-  (setq mode-name "ooc")
-  (set (make-local-variable 'font-lock-syntactic-face-function)
-       'ooc-font-lock-syntactic-face-function)
-
-  (c-initialize-cc-mode t)
-  (set-syntax-table ooc-mode-syntax-table)
-  (use-local-map ooc-mode-map)
-                                        ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
-  (c-init-language-vars ooc-mode)
-  (c-common-init 'ooc-mode)
-  ;; Might be some c-mode way to do this....
-  (set (make-local-variable 'indent-line-function)
-       'ooc-indent-line)
-  (c-set-style "ooc")
-  (run-hooks 'c-mode-common-hook)
-  (run-hooks 'ooc-mode-hook)
-  (c-update-modeline))
-
 
 ;;;###autoload
 (defun reload-all-ooc-libraries ()
@@ -355,6 +330,46 @@ use them now if you are using the git version of rock."
       (insert (shell-command-to-string (concat ooc-rock-binary " -r " file)))
       (delete-file (file-name-sans-extension file))
       (pop-to-buffer "*ooc rock output*"))))
+;;;###autoload
+(defun ooc-mode ()
+  "Major mode for editing ooc files."
+  (interactive)
+  (kill-all-local-variables)
+  ;; Setup environment things
+  (setq major-mode 'ooc-mode)
+  (setq mode-name "ooc")
+  (set (make-local-variable 'font-lock-syntactic-face-function)
+       'ooc-font-lock-syntactic-face-function)
+
+  (c-initialize-cc-mode t)
+  (set-syntax-table ooc-mode-syntax-table)
+  (use-local-map ooc-mode-map)
+                                        ;  (put 'ooc-mode 'c-mode-prefix "ooc-")
+  (c-init-language-vars ooc-mode)
+  (c-common-init 'ooc-mode)
+  ;; Might be some c-mode way to do this....
+  (set (make-local-variable 'indent-line-function)
+       'ooc-indent-line)
+  (set (make-local-variable 'semantic-lex-analyzer)
+       'ooc-lexer)
+  (setq semantic-lex-syntax-table ooc-mode-syntax-table)
+  (c-set-style "ooc")
+  (run-hooks 'c-mode-common-hook)
+  (run-hooks 'ooc-mode-hook)
+  (c-update-modeline))
+
+(define-lex ooc-lexer
+  "Lexical analyzer for ooc."
+  semantic-lex-ignore-whitespace
+  semantic-c-lex-ignore-newline
+  semantic-lex-symbol-or-keyword
+  semantic-lex-charquote
+  semantic-lex-paren-or-list
+  semantic-lex-close-paren
+  semantic-lex-ignore-comments
+  semantic-lex-punctuation
+  semantic-lex-default-action)
+
 
 (provide 'ooc-mode)
 
