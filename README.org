@@ -61,6 +61,27 @@ Emacs major mode for ooc-lang.
      =M-x flymake-ooc-init=. Provided the configuration is correct and you
      are using a recent rock from git syntax checking work project wide.
 
+** Snippets
+   Installing [[http://code.google.com/p/yasnippet/][yasnippet]] with ooc-mode gives template completion. Yasnippet
+   is an external package, so there is a small amount of extra work in
+   getting this setup. Install by following these steps:
+
+   : cd ~/.emacs.d/plugins
+   : svn checkout http://yasnippet.googlecode.com/svn/trunk/ yasnippet
+
+   Open your =~/.emacs= and add the following to the end of it:
+   : (add-to-list 'load-path "~/.emacs.d/plugins/yasnippet")
+   : (require 'yasnippet)
+   : (yas/initialize)
+   : (yas/load-directory "~/.emacs.d/plugins/yasnippet/snippets")
+   : (yas/load-directory "/path/to/ooc-mode/snippets")
+
+   The last line should point to snippets/ in this repository. By v0.3
+   there will be a way to customize that last load-directory in the ooc
+   customize group.
+
+   Please understand this whole snippets thing is alpha quality and may
+   break unexpectedly in future updates until v0.3 is released.
 
 * Bugs, issues, problems...
 
