@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 83
+;;     Update #: 84
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -228,6 +228,13 @@ These cover classes, functions, templates, and variables.")
 (defun ooc-syntax-in-match/case-case-p ()
   (looking-back "case\s*[^=\n]*\s*=>\s*\n.*" (- (point) 200)))
 
+(defun* ooc-backwards-string-indent-level (string &optional (point (point))
+                                                  (limit 200))
+  (save-excursion
+    (save-match-data
+      (- (search-backward string (- point limit))
+         (line-beginning-position)))))
+
 (defun ooc-indent-line (&optional syntax quiet ignore-point-pos)
   (cond
    ((ooc-last-line-import-statement-p)
@@ -239,13 +246,8 @@ These cover classes, functions, templates, and variables.")
    ((ooc-syntax-in-match/case-case-p)
     (c-indent-line (or syntax
                        `((brace-list-intro
-                          ,(save-excursion
-                            (save-match-data
-                              (let* ((p (point))
-                                     (case-at (search-backward "case" (- (point) 200)))
-                                     (indent-level (- case-at (line-beginning-position))))
-                                (goto-char p)
-                                (+ (line-beginning-position) indent-level)))))))
+                          ,(+ (line-beginning-position)
+                              (ooc-backwards-string-indent-level "case")))))
                    quiet ignore-point-pos))
    (t (c-indent-line syntax quiet ignore-point-pos))))
 
