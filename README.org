@@ -100,6 +100,19 @@ Emacs major mode for ooc-lang.
     : <funcnamehere>: func -> <typehere> {
     :     <your code here>
     : }
+**** for
+     : for(<i> := 0; <i> < <upto_var>; <i> += 1) {
+     :     <your code here>
+     : }
+**** match
+     : match <thing> {
+     :     case <matching_value> => <your code here>
+     : }
+**** other snippets
+     - while :: Expands to traditional while loop.
+     - if :: Expands to if statement with no else clause.
+     - case :: Expands to =case <match> => <your code here>=
+
 * Bugs, issues, problems...
 
   Please use the issues tab to report any issues.
