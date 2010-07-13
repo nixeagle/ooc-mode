@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: match
+# key: match
+# contributor: scott olson
+# --
+match ${1:thing} {
+   case ${2:0} => $0
+}
