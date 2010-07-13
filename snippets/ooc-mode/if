@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: if
+# key: if
+# contributor: scott olson
+# --
+if($1) {
+    $0
+}
