@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: case
+# key: case
+# contributor: scott olson
+# --
+case ${1:0} => $0
