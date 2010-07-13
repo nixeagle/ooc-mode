@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 103
+;;     Update #: 105
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -358,17 +358,6 @@ use them now if you are using the git version of rock."
   (run-hooks 'ooc-mode-hook)
   (c-update-modeline))
 
-(define-lex ooc-lexer
-  "Lexical analyzer for ooc."
-  semantic-lex-ignore-whitespace
-  semantic-c-lex-ignore-newline
-  semantic-lex-symbol-or-keyword
-  semantic-lex-charquote
-  semantic-lex-paren-or-list
-  semantic-lex-close-paren
-  semantic-lex-ignore-comments
-  semantic-lex-punctuation
-  semantic-lex-default-action)
 
 
 (provide 'ooc-mode)
