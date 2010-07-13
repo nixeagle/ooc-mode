@@ -27,6 +27,7 @@
 %keyword INCLUDE_KW    "include"
 %keyword USE_KW        "use"
 %keyword IF_KW         "if"
+%put IF_KW summary "If/then/else conditional"
 %keyword ELSE_KW       "else"
 %keyword FOR_KW        "for"
 %keyword WHILE_KW      "true"
@@ -51,8 +52,7 @@
 
 
 ;; catchall for keywords, leaves some out (based on nagaqueen.leg)
-KW:
-    BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
+KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
   | COVER_KW | ENUM_KW | FROM_KW | ABSTRACT_KW | FINAL_KW
   | STATIC_KW | INLINE_KW | EXTENDS_KW | EXTERN_KW | UNMANGLED_KW
   | IMPORT_KW | INCLUDE_KW | IF_KW | ELSE_KW | FOR_KW
@@ -125,7 +125,7 @@ KW:
 %token OPEN_BRACK    "{"
 %token CLOS_BRACK    "}"
 
-%token AT          "@"
+;;%token AT          "@"
 %token TILDE       "~"
 ;;%token -           [ \t]*
 ;; %token EOL         ("\n" | "\r\n" | "\r")  { core->yylineno++; }
@@ -135,8 +135,32 @@ KW:
 ;;%token WS          ([ \t] | Comment | EOL)*
 
 
+%%
+
 statements:
-  | statements KW
+  ' ' KW
   ;
 
+include
+  : INCLUDE_KW
 ;;a: NULL_KW
+
+
+%%
+
+;; define lexer for this grammar
+(define-lex ooc-lexer
+  "Lexical analyzer for ooc."
+  semantic-lex-ignore-whitespace
+  semantic-lex-beginning-of-line
+  semantic-lex-newline
+  ;;ooc-wisent-wy--<test>
+  ;;  semantic-c-lex-ignore-newline
+  semantic-lex-symbol-or-keyword
+  semantic-lex-charquote
+  semantic-lex-paren-or-list
+  semantic-lex-close-paren
+  semantic-lex-ignore-comments
+  semantic-lex-punctuation
+  semantic-lex-default-action)
+
