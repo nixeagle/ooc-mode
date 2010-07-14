@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 106
+;;     Update #: 107
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -144,14 +144,14 @@ These cover classes, functions, templates, and variables.")
                  (search-backward "("))) nil (1 font-lock-type-face))
 
 
-            ;; Mark signle words not yet highlighted as variables
+            ;; Mark single words not yet highlighted as variables
             (,(concat "\\(" ooc-syntax-identifier-regex "\\)")
              (let ((p (point)))
                (prog1 (search-forward ")")
                  (search-backward "("))) nil (1 font-lock-variable-name-face)))
 
-          ;; naive approach, treat |....| as a variable
-          '("|[0-9a-zA-Z_\\!\\? ,]*|" (0 nil)
+          ;;naive approach, treat |....| as a variable
+          '("|[0-9a-zA-Z_\\!\\? ,]+|" (0 nil)
             ("\\<\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\)\\>"
              (search-backward "|" nil nil 2) nil (1 font-lock-variable-name-face)))
 
