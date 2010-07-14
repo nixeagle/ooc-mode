@@ -34,7 +34,7 @@
 %keyword EXTERN_KW "extern"
 %put EXTERN_KW summary "NAME: extern[(EXTERNFUNCNAME)] func"
 %keyword UNMANGLED_KW "unmangled"
-%put UNMANGLED_KW summary "NAME: inline unmangled func {...}"
+%put UNMANGLED_KW summary "NAME: unmangled func {...}"
 %keyword IMPLEMENTS_KW "implements"
 %put IMPLEMENTS_KW summary "NAME: class implements INTERFACE1,INTERFACE2 {...}"
 %keyword IMPORT_KW "import"
