@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 115
+;;     Update #: 116
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -189,7 +189,9 @@ These cover classes, functions, templates, and variables.")
   :type 'hook
   :group 'ooc)
 
-(defvar ooc-mode-map
+
+
+(defun ooc-make-mode-map ()
   (let ((map (make-sparse-keymap)))
     (define-key map (kbd "C-k") 'ooc-kill-line-and-spaces)
     (define-key map (kbd "C-c C-r") 'ooc-run-single-file)
@@ -201,6 +203,12 @@ These cover classes, functions, templates, and variables.")
         (insert "\n")
         (funcall indent-line-function)))
     map))
+
+(defvar ooc-mode-map (ooc-make-mode-map))
+
+(defun ooc-reset-mode-map ()
+  (interactive)
+  (setq ooc-mode-map (ooc-make-mode-map)))
 ;(defvar ooc-mode-map nil "Keymap for `ooc-mode'.")
 
 (defun ooc-mode-make-syntax-table ()
