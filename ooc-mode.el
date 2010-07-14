@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 111
+;;     Update #: 112
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -109,12 +109,13 @@ These cover classes, functions, templates, and variables.")
 (defun ooc-highlight-variable-declarations-matcher (limit)
   "Match next variable declaration without matching past a : or LIMIT."
   (let ((.point (point)))
-    (when (search-forward ":" limit)
-      (let ((limit (point)))
-        (goto-char .point)
-        (re-search-forward (concat "\\(" ooc-syntax-identifier-regex "\\)"
-                                   "[, :$]")
-                           limit t)))))
+    (let ((.search (search-forward ":" (1+ limit) t)))
+      (when .search
+        (let ((limit (point)))
+          (goto-char .point)
+          (re-search-forward (concat "\\(" ooc-syntax-identifier-regex "\\)"
+                                     "[, :$]")
+                             limit t))))))
 (progn
   (c-lang-defconst c-matchers-3
     ooc (append
@@ -172,7 +173,7 @@ These cover classes, functions, templates, and variables.")
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):\s*\\(?:class\\|cover\\)" (1 font-lock-type-face))
 
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
-           '("^\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\)+:" (0 nil)
+           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\):" (0 nil)
              (ooc-highlight-variable-declarations-matcher (beginning-of-line) nil (1 font-lock-variable-name-face)))
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
