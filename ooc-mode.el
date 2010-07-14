@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 113
+;;     Update #: 114
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -173,7 +173,7 @@ These cover classes, functions, templates, and variables.")
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):\s*\\(?:class\\|cover\\)" (1 font-lock-type-face))
 
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
-           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\)\s*:" (0 nil)
+           '("^\s*\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\)+\s*:" (0 nil)
              (ooc-highlight-variable-declarations-matcher (beginning-of-line) nil (1 font-lock-variable-name-face)))
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
@@ -218,6 +218,7 @@ These cover classes, functions, templates, and variables.")
                  ;; this by looking for |...| just after
                  ;; a ',' char.
                  (arglist-cont-nonempty . +)
+                 (brace-list-entry . +)
                  (topmost-intro .
                                 (first ooc-lineup-oneline-if-statement
                                        ooc-lineup-oneline-else-statement
