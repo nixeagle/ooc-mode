@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 122
+;;     Update #: 123
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -51,6 +51,8 @@
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
 
+(require 'semantic)
+(require 'cedet)
 (require 'ooc-wisent-wy)
 
 (defgroup ooc nil
