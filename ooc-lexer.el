@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 1
+;;     Update #: 3
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -46,6 +46,8 @@
 ;;; Code:
 (require 'semantic)
 (require 'ooc-mode)
+
+(require 'ooc-wisent-wy)
 
 (define-lex ooc-lexer
   "Lexical analyzer for ooc."

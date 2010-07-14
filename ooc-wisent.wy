@@ -1,0 +1,166 @@
+%package ooc-wisent-wy
+%languagemode ooc-mode
+
+%start statements
+
+;; keywords
+%keyword BREAK_KW "break"
+%keyword CONTINUE_KW   "continue"
+%keyword RETURN_KW     "return"
+
+%keyword FUNC_KW       "func"
+%keyword CLASS_KW      "class"
+%keyword COVER_KW      "cover"
+%keyword ENUM_KW       "enum"
+%keyword INTERFACE_KW  "interface"
+%keyword FROM_KW       "from"
+%keyword ABSTRACT_KW   "abstract"
+%keyword FINAL_KW      "final"
+%keyword STATIC_KW     "static"
+%keyword INLINE_KW     "inline"
+%keyword EXTENDS_KW    "extends"
+%keyword EXTERN_KW     "extern"
+%keyword UNMANGLED_KW  "unmangled"
+%keyword IMPLEMENTS_KW "implements"
+
+%keyword IMPORT_KW     "import"
+%keyword INCLUDE_KW    "include"
+%keyword USE_KW        "use"
+%keyword IF_KW         "if"
+%put IF_KW summary "if (...) { ... } [[else | else if] { ... }]"
+%keyword ELSE_KW       "else"
+%keyword FOR_KW        "for"
+%keyword WHILE_KW      "true"
+%keyword MATCH_KW      "match"
+%keyword CASE_KW       "case"
+%keyword AS_KW         "as"
+%keyword IN_KW         "in"
+%keyword INTO_KW       "into"
+%keyword VERSION_KW    "version"
+%keyword PROTO_KW      "proto"
+
+%keyword SET_KW        "set"
+%keyword GET_KW        "get"
+
+%keyword OPERATOR_KW   "operator"
+%keyword CONST_KW      "const"
+
+%keyword TRUE_KW       "true"
+%keyword FALSE_KW      "false"
+
+%keyword NULL_KW       "null"
+
+
+;; catchall for keywords, leaves some out (based on nagaqueen.leg)
+KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
+  | COVER_KW | ENUM_KW | FROM_KW | ABSTRACT_KW | FINAL_KW
+  | STATIC_KW | INLINE_KW | EXTENDS_KW | EXTERN_KW | UNMANGLED_KW
+  | IMPORT_KW | INCLUDE_KW | IF_KW | ELSE_KW | FOR_KW
+  | WHILE_KW | AS_KW | OPERATOR_KW | CONST_KW | NULL_KW | MATCH_KW | CASE_KW
+  ;
+
+;; Simple tokens
+
+%token COMMA         ","
+;;%token DOT           !DOUBLE_DOT "."
+;;%token COLON         !ASS_DECL ":"
+
+%token R_ARROW       "->"
+%token DOUBLE_ARROW  ">"
+
+;; Operators
+%token ASS_DECL      ":"
+;;%token ASS           !DOUBLE_ARROW ""
+%token ASS_ADD       "+"
+%token ASS_SUB       "-"
+%token ASS_MUL       "*"
+%token ASS_DIV       "/"
+%token ASS_B_RSHIFT  ">>"
+%token ASS_B_LSHIFT  "<<"
+%token ASS_B_XOR     "^"
+%token ASS_B_OR      "|"
+%token ASS_B_AND     "&"
+
+%token QUEST         "?"
+
+%token L_OR          "||"
+
+%token L_AND         "&&"
+
+;;%token B_OR          !L_OR "|"
+
+%token B_XOR         "^"
+
+;;%token B_AND         !L_AND "&"
+
+%token EQUALS        "=="
+%token NOT_EQUALS    "!="
+
+%token LESSTHAN      "<"
+%token MORETHAN      ">"
+%token CMP           "<=>"
+%token LESSTHAN_EQ   "<="
+%token MORETHAN_EQ   ">="
+
+%token B_LSHIFT      "<<"
+%token B_RSHIFT      ">>"
+
+%token DOUBLE_DOT    ".."
+
+%token L_NOT         "!"
+%token B_NOT         "~"
+%token PLUS          "+"
+%token MINUS         "-"
+
+%token PERCENT       "%"
+%token STAR          "*"
+;;%token SLASH         "/" ![/*]
+
+%token OPEN_PAREN    "("
+%token CLOS_PAREN    ")"
+
+%token OPEN_SQUAR    "["
+%token CLOS_SQUAR    "]"
+
+%token OPEN_BRACK    "{"
+%token CLOS_BRACK    "}"
+
+;;%token AT          "@"
+%token TILDE       "~"
+;;%token -           [ \t]*
+;; %token EOL         ("\n" | "\r\n" | "\r")  { core->yylineno++; }
+;; %token Terminator  (CommentLine
+;;            | CommentMultiLine? (EOL | ";")
+;;              )
+;;%token WS          ([ \t] | Comment | EOL)*
+
+
+%%
+
+statements:
+  ' ' KW
+  ;
+
+include
+  : INCLUDE_KW
+;;a: NULL_KW
+
+
+%%
+
+;; define lexer for this grammar
+(define-lex ooc-lexer
+  "Lexical analyzer for ooc."
+  semantic-lex-ignore-whitespace
+  semantic-lex-beginning-of-line
+  semantic-lex-newline
+  ;;ooc-wisent-wy--<test>
+  ;;  semantic-c-lex-ignore-newline
+  semantic-lex-symbol-or-keyword
+  semantic-lex-charquote
+  semantic-lex-paren-or-list
+  semantic-lex-close-paren
+  semantic-lex-ignore-comments
+  semantic-lex-punctuation
+  semantic-lex-default-action)
+

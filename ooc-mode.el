@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 121
+;;     Update #: 122
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -50,6 +50,8 @@
   (require 'cc-fonts)
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
+
+(require 'ooc-wisent-wy)
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
@@ -380,6 +382,7 @@ use them now if you are using the git version of rock."
   (set (make-local-variable 'semantic-lex-analyzer)
        'ooc-lexer)
   (setq semantic-lex-syntax-table ooc-mode-syntax-table)
+  (ooc-wisent-wy--install-parser)
   (c-set-style "ooc")
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
