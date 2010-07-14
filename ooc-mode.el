@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 107
+;;     Update #: 111
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -95,7 +95,7 @@ used, otherwise we default to /usr/lib/ooc/."
   (fixup-whitespace))
 
 (defconst ooc-syntax-identifier-regex
-  "\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\>"
+  "\\<[a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?"
   "Regexp matching valid ooc identifiers.
 
 These cover classes, functions, templates, and variables.")
@@ -106,11 +106,19 @@ These cover classes, functions, templates, and variables.")
   (let ((p (point)))
     (prog1 (search-forward ")")
       (search-backward "("))))
-
+(defun ooc-highlight-variable-declarations-matcher (limit)
+  "Match next variable declaration without matching past a : or LIMIT."
+  (let ((.point (point)))
+    (when (search-forward ":" limit)
+      (let ((limit (point)))
+        (goto-char .point)
+        (re-search-forward (concat "\\(" ooc-syntax-identifier-regex "\\)"
+                                   "[, :$]")
+                           limit t)))))
 (progn
   (c-lang-defconst c-matchers-3
     ooc (append
-                                       ;;(c-lang-const c-matchers-3)
+         ;;(c-lang-const c-matchers-3)
          (list
           (cons (concat "\\<"
                         (regexp-opt '("class" "cover" "func" "abstract" "from" "this"
@@ -160,8 +168,12 @@ These cover classes, functions, templates, and variables.")
                                         ; (print (format "a"))
           ;; variable declarations, start of line
 
-          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):" (1 font-lock-function-name-face))
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):\s*\\(static\s*\\)?func" (1 font-lock-function-name-face))
+          '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):\s*\\(?:class\\|cover\\)" (1 font-lock-type-face))
+
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
+           '("^\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\)+:" (0 nil)
+             (ooc-highlight-variable-declarations-matcher (beginning-of-line) nil (1 font-lock-variable-name-face)))
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
   (defconst ooc-font-lock-keywords-3 (c-lang-const c-matchers-3 ooc)))
