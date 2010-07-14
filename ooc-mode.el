@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 107
+;;     Update #: 113
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -50,6 +50,8 @@
   (require 'cc-fonts)
   (require 'cl)
   (c-add-language 'ooc-mode 'c-mode))
+
+(require 'ooc-wisent-wy)
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
