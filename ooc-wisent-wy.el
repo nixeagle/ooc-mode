@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-14 22:24:29+0000
+;; Created: 2010-07-14 22:25:59+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -116,7 +116,7 @@
      ("{" . OPEN_BRACK)
      ("}" . CLOS_BRACK)
      ("~" . TILDE))
-   '(("if" summary "If/then/else conditional")))
+   '(("if" summary "if (...) { ... } [[else | else if] { ... }]")))
   "Table of language keywords.")
 
 (defconst ooc-wisent-wy--token-table

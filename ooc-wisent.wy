@@ -27,7 +27,7 @@
 %keyword INCLUDE_KW    "include"
 %keyword USE_KW        "use"
 %keyword IF_KW         "if"
-%put IF_KW summary "If/then/else conditional"
+%put IF_KW summary "if (...) { ... } [[else | else if] { ... }]"
 %keyword ELSE_KW       "else"
 %keyword FOR_KW        "for"
 %keyword WHILE_KW      "true"
