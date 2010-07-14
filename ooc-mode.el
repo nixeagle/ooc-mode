@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 105
+;;     Update #: 106
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -212,9 +212,9 @@ These cover classes, functions, templates, and variables.")
                  (else-clause . (first ooc-lineup-oneline-else-clause
                                        0))
                  (statement . (first ooc-lineup-oneline-if-statement
-                                     ooc-lineup-oneline-else-statement
                                      0))
                  (arglist-close . 0)))))
+
 (defun ooc-lineup-oneline-if-statement (langelem)
   (save-excursion
     (when (looking-back "if\s*([^)]*)\s*\n.*")
