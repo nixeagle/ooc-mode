@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 112
+;;     Update #: 113
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -173,7 +173,7 @@ These cover classes, functions, templates, and variables.")
           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?\\\):\s*\\(?:class\\|cover\\)" (1 font-lock-type-face))
 
           '("\\\(\(\\\|->\\\|:=?\\\)\\\s*\\\([A-Z][0-9a-zA-Z_]*[\\\!\\\?]?\\\)" 2 font-lock-type-face)
-           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\):" (0 nil)
+           '("\\\([a-zA-Z_][0-9a-zA-Z_]*[\\\!\\\?]?[ ,]*\\\)\s*:" (0 nil)
              (ooc-highlight-variable-declarations-matcher (beginning-of-line) nil (1 font-lock-variable-name-face)))
           '("\\b[A-Z_][0-9a-zA-Z_]*" 0 font-lock-type-face))))
   (defconst ooc-font-lock-keywords-2 (c-lang-const c-matchers-2 ooc))
