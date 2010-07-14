@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 116
+;;     Update #: 119
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -290,7 +290,14 @@ These cover classes, functions, templates, and variables.")
   (looking-back "\\(if\s*(.*)\\|else\\)\s*\n+.*" (- (point) 200)))
 
 (defun ooc-syntax-in-match/case-case-p ()
-  (looking-back "case\s*[^=\n]*\s*=>\s*\n.*" (- (point) 200)))
+  (let ((.point (point)))
+    (let ((.current-bol (beginning-of-line)))
+      (beginning-of-line)
+      (prog1
+          (and (equal (point) .current-bol) ; nil if on top line
+               (search-forward "case" .current-bol) ; |case| <blah> => \n ...
+               (search-forward "=>" .current-bol)) ; case <blah> |=>| \n ...
+        (goto-char .point)))))
 
 
 (defun* ooc-backwards-string-indent-level (string &optional (point (point))
