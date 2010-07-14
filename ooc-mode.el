@@ -280,15 +280,6 @@ These cover classes, functions, templates, and variables.")
      ((string= comment-start-chars "/**") 'font-lock-doc-face)
      (t (if (nth 3 state) font-lock-string-face font-lock-comment-face)))))
 
-(defun ooc-last-line-import-statement-p ()
-  ;; Semi fix to the issue, We need to make sure that other toplevel
-  ;; statements like comments or strings don't happen to confuse us about
-  ;; statement-cont status.
-  (looking-back "import.*[\n\s]*\n.*" (- (point) 200)))
-
-(defun ooc-syntax-in-oneline-conditional-p ()
-  (looking-back "\\(if\s*(.*)\\|else\\)\s*\n+.*" (- (point) 200)))
-
 (defun ooc-syntax-in-match/case-case-p ()
   (let ((.point (point)))
     (let ((.current-bol (beginning-of-line)))
