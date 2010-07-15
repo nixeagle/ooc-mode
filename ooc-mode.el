@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 128
+;;     Update #: 129
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -342,7 +342,6 @@ These cover classes, functions, templates, and variables.")
     (beginning-of-line)
     (let ((.current-bol (point)))
       (beginning-of-line 0)
-      (print (list .point .current-bol (point)))
       (prog1
           (and (not (equal (point) .current-bol)) ; nil if on top line
                (search-forward "case" .current-bol t) ; |case| <blah> => \n ...
