@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 123
+;;     Update #: 124
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -54,6 +54,21 @@
 (require 'semantic)
 (require 'cedet)
 (require 'ooc-wisent-wy)
+
+
+;; Ugly fix to shut this annoying errors because of a depreciation
+;; function being fed 3 arguments instead of 2.
+;;
+;; This is from mode-local.el of cedet 1.0pre7
+;;  [2010-07-15 Thu 03:49]
+(defun make-obsolete-overload (old new &optional version)
+  "Mark OLD overload as obsoleted by NEW overload.
+
+The optional VERSION argument here is just to shutup errors from
+code passing version numbers. (Bugfix)."
+  (put old 'overload-obsoleted-by new)
+  (put old 'mode-local-overload t)
+  (put new 'overload-obsolete old))
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
