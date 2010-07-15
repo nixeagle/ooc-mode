@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 125
+;;     Update #: 126
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -86,6 +86,27 @@ will throw a warning WHEN it encounters this symbol."
        (semantic-compile-warn
         "variable `%s' obsoletes, but isn't alias of `%s'"
         newvar oldvaralias)))))
+
+;; And more from semantic/fw.el!
+(defun semantic-alias-obsolete (oldfnalias newfn &optional when)
+  "Make OLDFNALIAS an alias for NEWFN.
+Mark OLDFNALIAS as obsolete, such that the byte compiler
+will throw a warning WHEN it encounters this symbol."
+  (defalias oldfnalias newfn)
+  (let ((when "23.2"))
+    (make-obsolete oldfnalias newfn when)
+    (when (and (function-overload-p newfn)
+               (not (overload-obsoleted-by newfn))
+               ;; Only throw this warning when byte compiling things.
+               (boundp 'byte-compile-current-file)
+               byte-compile-current-file
+               (not (string-match "cedet" byte-compile-current-file)))
+      (make-obsolete-overload oldfnalias newfn when)
+      (semantic-compile-warn
+       "%s: `%s' obsoletes overload `%s'"
+       byte-compile-current-file
+       newfn
+       (semantic-overload-symbol-from-function oldfnalias)))))
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
