@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 124
+;;     Update #: 125
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -69,6 +69,23 @@ code passing version numbers. (Bugfix)."
   (put old 'overload-obsoleted-by new)
   (put old 'mode-local-overload t)
   (put new 'overload-obsolete old))
+
+;; More silliness, this time from semantic/fw.el
+;;   [2010-07-15 Thu 03:57]
+(defun semantic-varalias-obsolete (oldvaralias newvar &optional when)
+  "Make OLDVARALIAS an alias for variable NEWVAR.
+Mark OLDVARALIAS as obsolete, such that the byte compiler
+will throw a warning WHEN it encounters this symbol."
+  (make-obsolete-variable oldvaralias newvar (or when "23.2"))
+  (condition-case nil
+      (defvaralias oldvaralias newvar)
+    (error
+     ;; Only throw this warning when byte compiling things.
+     (when (and (boundp 'byte-compile-current-file)
+                byte-compile-current-file)
+       (semantic-compile-warn
+        "variable `%s' obsoletes, but isn't alias of `%s'"
+        newvar oldvaralias)))))
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
