@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 24
+;;     Update #: 25
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -77,7 +77,8 @@
            (loop for path in (flymake-ooc-find-sourcepaths project)
                  when (search path (file-truename file))
                  return (file-relative-name file path)))
-      file))
+      (file-relative-name file
+                          (file-name-directory file))))
 
 (defun flymake-ooc-make-absolute-path-option (option root)
   ;; Mostly a hack for oos issues with sourcepath. This can be updated to
