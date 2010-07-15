@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 23
+;;     Update #: 24
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -60,6 +60,25 @@
                     (flymake-ooc-make-absolute-path-option option (file-truename path))) (append command-opts flymake-ooc-rock-command-line-options)))
       flymake-ooc-rock-command-line-options)))
 
+
+
+
+(defun flymake-ooc-find-sourcepaths (project)
+  (destructuring-bind (name path command-opts &rest remaining) project
+
+   (mapcan (lambda (option)
+             (if (search "-sourcepath=" option)
+                 (list (expand-file-name (substring option (length "-sourcepath="))
+                                         path))))
+           command-opts)))
+
+(defun flymake-ooc-file-relative-path (project file)
+  (or (and project
+           (loop for path in (flymake-ooc-find-sourcepaths project)
+                 when (search path (file-truename file))
+                 return (file-relative-name file path)))
+      file))
+
 (defun flymake-ooc-make-absolute-path-option (option root)
   ;; Mostly a hack for oos issues with sourcepath. This can be updated to
   ;; make any rock option absolute instead of relative.
@@ -70,15 +89,12 @@
     option))
 (defun flymake-ooc-init ()
   (append (list flymake-ooc-rock-binary
-         (append (flymake-ooc-get-command-line-options)
-                 (list (concat "-sourcepath=."))
-                 (list
-                  (file-relative-name
-                   (flymake-init-create-temp-buffer-copy
-                    'flymake-create-temp-inplace)
-                   (file-name-directory buffer-file-name))))
-         ))
-  )
+                (append (flymake-ooc-get-command-line-options)
+                        (list
+                         (flymake-ooc-file-relative-path
+                          (ooc-find-root-project)
+                          (flymake-init-create-temp-buffer-copy
+                           'flymake-create-temp-inplace)))))))
 
 (add-to-list 'flymake-allowed-file-name-masks
              '(".+\\.ooc$" flymake-ooc-init))
