@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 126
+;;     Update #: 128
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -339,11 +339,13 @@ These cover classes, functions, templates, and variables.")
 
 (defun ooc-syntax-in-match/case-case-p ()
   (let ((.point (point)))
-    (let ((.current-bol (beginning-of-line)))
-      (beginning-of-line)
+    (beginning-of-line)
+    (let ((.current-bol (point)))
+      (beginning-of-line 0)
+      (print (list .point .current-bol (point)))
       (prog1
-          (and (equal (point) .current-bol) ; nil if on top line
-               (search-forward "case" .current-bol) ; |case| <blah> => \n ...
+          (and (not (equal (point) .current-bol)) ; nil if on top line
+               (search-forward "case" .current-bol t) ; |case| <blah> => \n ...
                (search-forward "=>" .current-bol)) ; case <blah> |=>| \n ...
         (goto-char .point)))))
 
