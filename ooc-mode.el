@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 129
+;;     Update #: 130
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -290,7 +290,8 @@ These cover classes, functions, templates, and variables.")
                  ;; this by looking for |...| just after
                  ;; a ',' char.
                  (arglist-cont-nonempty . +)
-                 (brace-list-entry . +)
+                 (brace-list-entry . (first ooc-lineup-multiline-case-statement
+                                            0))
                  (topmost-intro .
                                 (first ooc-lineup-oneline-if-statement
                                        ooc-lineup-oneline-else-statement
@@ -301,6 +302,10 @@ These cover classes, functions, templates, and variables.")
                                      0))
                  (arglist-close . 0)))))
 
+(defun ooc-lineup-multiline-case-statement (langelem)
+  (save-excursion
+    (when (looking-back "case.*=>[^{}]+")
+      '+)))
 (defun ooc-lineup-oneline-if-statement (langelem)
   (save-excursion
     (when (looking-back "if\s*([^)]*)\s*\n.*")
