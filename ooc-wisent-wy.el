@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-16 04:08:58+0000
+;; Created: 2010-07-16 04:46:44+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -231,7 +231,10 @@
          (progn
            (print
             (list $1 $2 $3))
-           (concat $1 $2 $3)))))
+           (concat $1 $2 $3))))
+       (BOOLEAN_LITERAL
+        ((TRUE_KW))
+        ((FALSE_KW))))
      '(goal)))
   "Parser table.")
 
@@ -312,8 +315,8 @@
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-whitespace
+  semantic-lex-newline
+  semantic-lex-whitespace
   semantic-lex-default-action)
 
 (provide 'ooc-wisent-wy)

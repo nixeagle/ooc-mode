@@ -193,6 +193,7 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token <symbol> ALPHANUMERIC "[A-Za-z_0-9]+"
 %token <symbol> IDENTIFIER
 
+
 %%
 
 goal
@@ -230,6 +231,11 @@ import_path
     (progn (print (list $1 $2 $3)) (concat $1 $2 $3))
   ;
 
+
+BOOLEAN_LITERAL
+  : TRUE_KW
+  | FALSE_KW;
+
 %%
 
 ;; define lexer for this grammar
@@ -250,7 +256,7 @@ import_path
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-whitespace
+  semantic-lex-newline
+  semantic-lex-whitespace
   semantic-lex-default-action)
 
