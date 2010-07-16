@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-16 05:23:15+0000
+;; Created: 2010-07-16 21:34:37+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -215,7 +215,10 @@
         ((MATCH_KW))
         ((CASE_KW)))
        (goal
-        ((import)))
+        ((value_core)
+         (wisent-raw-tag
+          (semantic-tag-new-code $1 nil nil)))
+        ((tuple)))
        (import
         ((IMPORT_KW import_path)
          (wisent-raw-tag
@@ -242,6 +245,34 @@
            (concat $1 $2 $3))))
        (comment
         (nil))
+       (tuple
+        ((PAREN_BLOCK)
+         (semantic-bovinate-from-nonterminal
+          (car $region1)
+          (cdr $region1)
+          'tuple_item)))
+       (tuple_item
+        ((OPEN_PAREN expression CLOSE_PAREN)
+         (wisent-raw-tag
+          (semantic-tag-new-code $2 nil nil nil :tuple t))))
+       (expression
+        ((value_core)
+         (wisent-raw-tag
+          (semantic-tag-new-code $1 nil nil))))
+       (value_core
+        ((number_literal))
+        ((STRING_LITERAL))
+        ((BOOLEAN_LITERAL))
+        ((NULL_KW))
+        ((tuple)))
+       (number_literal
+        ((integer_literal))
+        ((FLOAT_LITERAL))
+        ((BIN_LITERAL)))
+       (integer_literal
+        ((OCT_LITERAL))
+        ((HEX_LITERAL))
+        ((DEC_LITERAL)))
        (WHITESPACE
         (nil)
         ((SPACES))
@@ -250,7 +281,7 @@
        (BOOLEAN_LITERAL
         ((TRUE_KW))
         ((FALSE_KW))))
-     '(goal)))
+     '(goal tuple_item)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()

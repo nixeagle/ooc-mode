@@ -240,6 +240,48 @@ comment
   : ;; EMPTY
   ;
 
+tuple
+  : PAREN_BLOCK
+    (EXPAND $1 tuple_item)
+  ;
+
+;; SIMPLE tuple form right now, does (1) and nothing else.
+tuple_item
+  : OPEN_PAREN expression CLOSE_PAREN
+    (CODE-TAG $2 nil nil nil :tuple t)
+  ;
+
+expression
+  : value_core
+    (CODE-TAG $1 nil nil)
+;
+
+value_core
+  : number_literal
+  | STRING_LITERAL
+ ;; | CHARACTER_LITERAL
+  | BOOLEAN_LITERAL
+  | NULL_KW
+ ;; | Match
+ ;; | ArrayLiteral
+  | tuple
+ ;; | FunctionCall
+ ;; | GenericType
+ ;; | VariableAccess
+  ;
+
+number_literal
+  : integer_literal
+  | FLOAT_LITERAL
+  | BIN_LITERAL
+  ;
+
+integer_literal
+  : OCT_LITERAL
+  | HEX_LITERAL
+  | DEC_LITERAL
+  ;
+
 ;; Match all types of whitespace including comments (treat them as
 ;; whitespace for now...).
 WHITESPACE
