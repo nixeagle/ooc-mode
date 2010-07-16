@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-16 21:34:37+0000
+;; Created: 2010-07-16 21:50:14+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -245,6 +245,16 @@
            (concat $1 $2 $3))))
        (comment
         (nil))
+       (array_literal
+        ((SQUARE_BLOCK)
+         (semantic-bovinate-from-nonterminal
+          (car $region1)
+          (cdr $region1)
+          'array_literal_item)))
+       (array_literal_item
+        ((OPEN_SQUARE expression CLOSE_SQUARE)
+         (wisent-raw-tag
+          (semantic-tag-new-code $2 nil nil nil :array t))))
        (tuple
         ((PAREN_BLOCK)
          (semantic-bovinate-from-nonterminal
@@ -264,6 +274,7 @@
         ((STRING_LITERAL))
         ((BOOLEAN_LITERAL))
         ((NULL_KW))
+        ((array_literal))
         ((tuple)))
        (number_literal
         ((integer_literal))
@@ -281,7 +292,7 @@
        (BOOLEAN_LITERAL
         ((TRUE_KW))
         ((FALSE_KW))))
-     '(goal tuple_item)))
+     '(goal tuple_item array_literal_item)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()

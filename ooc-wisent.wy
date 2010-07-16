@@ -2,6 +2,8 @@
 %languagemode ooc-mode
 
 %start goal
+%start tuple_item
+%start array_literal_item
 
 ;; keywords
 %type <keyword>
@@ -202,8 +204,11 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %%
 
 goal
-  : import
+  : value_core
+    (CODE-TAG $1 nil nil)
+   | tuple
   ;
+
 
 
 ;; import <path>/<filename>
@@ -240,6 +245,15 @@ comment
   : ;; EMPTY
   ;
 
+array_literal
+  : SQUARE_BLOCK
+    (EXPAND $1 array_literal_item)
+  ;
+array_literal_item
+  : OPEN_SQUARE expression CLOSE_SQUARE
+    (CODE-TAG $2 nil nil nil :array t)
+  ;
+
 tuple
   : PAREN_BLOCK
     (EXPAND $1 tuple_item)
@@ -263,7 +277,7 @@ value_core
   | BOOLEAN_LITERAL
   | NULL_KW
  ;; | Match
- ;; | ArrayLiteral
+  | array_literal
   | tuple
  ;; | FunctionCall
  ;; | GenericType
