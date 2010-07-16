@@ -198,7 +198,7 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 
 %token <whitespace> SPACES
 ;;%type <newline>
-%token <newline> NEWLINE
+%token <newline> EOL
 %%
 
 goal
@@ -245,7 +245,7 @@ comment
 WHITESPACE
   : ;; EMPTY
   | SPACES
-  | NEWLINE
+  | EOL
   | comment;
 
 BOOLEAN_LITERAL
