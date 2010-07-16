@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-16 04:46:44+0000
+;; Created: 2010-07-16 05:19:10+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -132,7 +132,11 @@
 
 (defconst ooc-wisent-wy--token-table
   (semantic-lex-make-type-table
-   '(("symbol"
+   '(("newline"
+      (NEWLINE))
+     ("whitespace"
+      (SPACES))
+     ("symbol"
       (IDENTIFIER)
       (ALPHANUMERIC . "[A-Za-z_0-9]+"))
      ("string"
@@ -167,6 +171,10 @@
      ("block" :declared t)
      ("number" syntax "-?\\(0c[0-8][0-8_]*\\|0b[01][01_]*\\|0x[0-9a-fA-F][0-9a-fA-F_]*\\|[0-9_]+\\.[0-9_]*\\|[0-9][0-9_]*\\)")
      ("number" :declared t)
+     ("newline" syntax "\\(\n\\| >\\)")
+     ("newline" :declared t)
+     ("whitespace" syntax "\\([ ]+\\)")
+     ("whitespace" :declared t)
      ("keyword" :declared t)))
   "Table of lexical tokens.")
 
@@ -177,7 +185,7 @@
        (require 'wisent-comp nil t)
        (require 'semantic/wisent/comp nil t)))
     (wisent-compile-grammar
-     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT L_NOT B_NOT PLUS MINUS PERCENT STAR PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
+     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT L_NOT B_NOT PLUS MINUS PERCENT STAR PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER SPACES NEWLINE)
        nil
        (KW
         ((BREAK_KW))
@@ -232,6 +240,13 @@
            (print
             (list $1 $2 $3))
            (concat $1 $2 $3))))
+       (comment
+        (nil))
+       (WHITESPACE
+        (nil)
+        ((SPACES))
+        ((NEWLINE))
+        ((comment)))
        (BOOLEAN_LITERAL
         ((TRUE_KW))
         ((FALSE_KW))))
@@ -273,6 +288,12 @@
     ("}" CLOSE_BRACKET))
   )
 
+(define-lex-regex-type-analyzer ooc-wisent-wy--<whitespace>-regexp-analyzer
+  "regexp analyzer for <whitespace> tokens."
+  "\\([ ]+\\)"
+  nil
+  'SPACES)
+
 (define-lex-sexp-type-analyzer ooc-wisent-wy--<string>-sexp-analyzer
   "sexp analyzer for <string> tokens."
   "\\s\""
@@ -294,6 +315,12 @@
     (DEC_LITERAL . "-?[0-9][0-9_]*"))
   'number)
 
+(define-lex-regex-type-analyzer ooc-wisent-wy--<newline>-regexp-analyzer
+  "regexp analyzer for <newline> tokens."
+  "\\(\n\\| >\\)"
+  nil
+  'NEWLINE)
+
 
 ;;; Epilogue
 ;;
@@ -309,7 +336,10 @@
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
+  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ooc-wisent-wy--<newline>-regexp-analyzer
 
+  ;;  ooc-wisent-wy--
   ;;  semantic-lex-symbol-or-keyword
   semantic-lex-charquote
   semantic-lex-paren-or-list

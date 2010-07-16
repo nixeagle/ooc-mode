@@ -139,6 +139,8 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token STAR          "*"
 ;;%token SLASH         "/" ![/*]
 
+%type <whitespace>      syntax "\\([\s]+\\)"
+%type <newline>      syntax "\\(\n\\|\s>\\)"
 %type <number>      syntax "-?\\(0c[0-8][0-8_]*\\|0b[01][01_]*\\|0x[0-9a-fA-F][0-9a-fA-F_]*\\|[0-9_]+\\.[0-9_]*\\|[0-9][0-9_]*\\)"
 
 %type <block>
@@ -194,6 +196,9 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token <symbol> IDENTIFIER
 
 
+%token <whitespace> SPACES
+;;%type <newline>
+%token <newline> NEWLINE
 %%
 
 goal
@@ -231,6 +236,17 @@ import_path
     (progn (print (list $1 $2 $3)) (concat $1 $2 $3))
   ;
 
+comment
+  : ;; EMPTY
+  ;
+
+;; Match all types of whitespace including comments (treat them as
+;; whitespace for now...).
+WHITESPACE
+  : ;; EMPTY
+  | SPACES
+  | NEWLINE
+  | comment;
 
 BOOLEAN_LITERAL
   : TRUE_KW
@@ -243,15 +259,14 @@ BOOLEAN_LITERAL
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
-  ;; semantic-lex-newline
-  ;;ooc-wisent-wy--<test>
   ooc-wisent-wy--<number>-regexp-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
+  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ooc-wisent-wy--<newline>-regexp-analyzer
 
-  ;;  semantic-lex-symbol-or-keyword
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
