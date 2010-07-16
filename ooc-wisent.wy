@@ -95,6 +95,8 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token ASS_ADD       "+"
 %token ASS_SUB       "-"
 %token ASS_MUL       "*"
+%token <punctuation> OOCDOC_SINGLE_LINE_START "///"
+%token <punctuation> COMMENT_SINGLE_LINE_START "//"
 %token <punctuation> ASS_DIV       "/"
 %token ASS_B_RSHIFT  ">>"
 %token ASS_B_LSHIFT  "<<"
@@ -137,14 +139,19 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token STAR          "*"
 ;;%token SLASH         "/" ![/*]
 
-%token OPEN_PAREN    "("
-%token CLOS_PAREN    ")"
+%type <block>
+%token <block> PAREN_BLOCK "(OPEN_PAREN CLOSE_PAREN)"
+%token <block> SQUARE_BLOCK "(OPEN_SQUARE CLOSE_SQUARE)"
+%token <block> BRACKET_BLOCK "(OPEN_BRACKET CLOSE_BRACKET)"
 
-%token OPEN_SQUAR    "["
-%token CLOS_SQUAR    "]"
+%token <open-paren> OPEN_PAREN    "("
+%token <close-paren> CLOSE_PAREN    ")"
 
-%token OPEN_BRACK    "{"
-%token CLOS_BRACK    "}"
+%token <open-paren> OPEN_SQUARE    "["
+%token <close-paren> CLOSE_SQUARE    "]"
+
+%token <open-paren> OPEN_BRACKET    "{"
+%token <close-paren> CLOSE_BRACKET    "}"
 
 ;;%token AT          "@"
 %token TILDE       "~"
@@ -165,6 +172,7 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 goal
   : import
   ;
+
 
 ;; import <path>/<filename>
 ;; This only works for the simplest possible cases right now
@@ -205,7 +213,7 @@ import_path
   ;;  semantic-lex-beginning-of-line
   ;; semantic-lex-newline
   ;;ooc-wisent-wy--<test>
-  semantic-lex-ignore-newline
+  ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
 
@@ -213,8 +221,8 @@ import_path
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
-  semantic-lex-ignore-comments
   semantic-lex-punctuation-type
+  semantic-lex-newline
   semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 
