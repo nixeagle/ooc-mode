@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 129
+;;     Update #: 131
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -437,6 +437,9 @@ use them now if you are using the git version of rock."
        'ooc-indent-line)
   (set (make-local-variable 'semantic-lex-analyzer)
        'ooc-lexer)
+  (set (make-local-variable 'wisent-discarding-token-functions)
+       (list (lambda (token)
+               (print token))))
   (setq semantic-lex-syntax-table ooc-mode-syntax-table)
   (ooc-wisent-wy--install-parser)
   (c-set-style "ooc")
@@ -444,7 +447,25 @@ use them now if you are using the git version of rock."
   (run-hooks 'ooc-mode-hook)
   (c-update-modeline))
 
+(defun nix.lex-test ()
+  (interactive)
+  (with-current-buffer "ooc-wisent.wy"
+    (semantic-grammar-create-package))
+  (with-current-buffer "lex-test.ooc"
+    (setq semantic-lex-syntax-table ooc-mode-syntax-table)
+    (ooc-wisent-wy--install-parser)
+                                        ;(erase-buffer)
+ ;;   (ooc-mode)
+                                        ;(insert .string)
+    (semantic-lex 0 (buffer-end 1) 1 10)
+    (bovinate 1)
 
+
+    )
+  (switch-to-buffer "lex-test.ooc" t)
+  (other-window 1)
+  (switch-to-buffer "*Parser Output*" t)
+  (other-window -1))
 
 (provide 'ooc-mode)
 
