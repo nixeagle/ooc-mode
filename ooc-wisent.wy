@@ -162,6 +162,11 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 ;;              )
 ;;%token WS          ([ \t] | Comment | EOL)*
 
+;; Just use default string literals for now
+%type <string>
+%token <string>      STRING_LITERAL
+
+
 %type <symbol> ;; syntax "\\(\\sw\\|\\s_\\)+" matchdatatype string
 
 %token <symbol> ALPHANUMERIC "[A-Za-z_0-9]+"
@@ -213,6 +218,7 @@ import_path
   ;;  semantic-lex-beginning-of-line
   ;; semantic-lex-newline
   ;;ooc-wisent-wy--<test>
+  ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
