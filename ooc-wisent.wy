@@ -139,6 +139,8 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token STAR          "*"
 ;;%token SLASH         "/" ![/*]
 
+%type <number>      syntax "-?\\(0c[0-8][0-8_]*\\|0b[01][01_]*\\|0x[0-9a-fA-F][0-9a-fA-F_]*\\|[0-9_]+\\.[0-9_]*\\|[0-9][0-9_]*\\)"
+
 %type <block>
 %token <block> PAREN_BLOCK "(OPEN_PAREN CLOSE_PAREN)"
 %token <block> SQUARE_BLOCK "(OPEN_SQUARE CLOSE_SQUARE)"
@@ -152,6 +154,25 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 
 %token <open-paren> OPEN_BRACKET    "{"
 %token <close-paren> CLOSE_BRACKET    "}"
+
+
+;;;; Numbers
+;; Decimal number, base 10, like 102_123 or -23
+%token <number> DEC_LITERAL "-?[0-9][0-9_]*"
+;; Float like -12_320.032_3
+%token <number> FLOAT_LITERAL "-?[0-9_]+\\.[0-9_]*"
+
+;;;; These 3 are defined in nagaqueen with no - sign in the definition, we
+;;;; permit it here for ease of classification within emacs.
+;;;;     [2010-07-16 Fri 03:10]
+;; Octal number, base 7
+%token <number> OCT_LITERAL "-?0c[0-8][0-8_]*"
+;; binary number, base 2
+%token <number> BIN_LITERAL "-?0b[01][01_]*"
+;; hexidecimal number, base 16
+%token <number> HEX_LITERAL "-?0x[0-9a-fA-F][0-9a-fA-F_]*"
+
+
 
 ;;%token AT          "@"
 %token TILDE       "~"
@@ -218,6 +239,7 @@ import_path
   ;;  semantic-lex-beginning-of-line
   ;; semantic-lex-newline
   ;;ooc-wisent-wy--<test>
+  ooc-wisent-wy--<number>-regexp-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
@@ -228,7 +250,7 @@ import_path
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-newline
+  semantic-lex-ignore-newline
   semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 
