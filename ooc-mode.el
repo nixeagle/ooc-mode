@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 131
+;;     Update #: 132
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -457,7 +457,10 @@ use them now if you are using the git version of rock."
                                         ;(erase-buffer)
  ;;   (ooc-mode)
                                         ;(insert .string)
-    (semantic-lex 0 (buffer-end 1) 1 10)
+    (let ((.lex (semantic-lex 0 (buffer-end 1) 1)))
+      (with-current-buffer "*Lexer Output*"
+        (erase-buffer)
+        (insert (format "%S" .lex))))
     (bovinate 1)
 
 
