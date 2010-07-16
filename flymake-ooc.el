@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 25
+;;     Update #: 26
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -80,6 +80,12 @@
       (file-relative-name file
                           (file-name-directory file))))
 
+(defun flymake-ooc-file-relative-root (project file)
+  (and project
+       (loop for path in (flymake-ooc-find-sourcepaths project)
+             when (search path (file-truename file))
+             return path)))
+
 (defun flymake-ooc-make-absolute-path-option (option root)
   ;; Mostly a hack for oos issues with sourcepath. This can be updated to
   ;; make any rock option absolute instead of relative.
@@ -88,6 +94,31 @@
               (expand-file-name (substring option (length "-sourcepath="))
                                 root))
     option))
+
+;; Hopefully this does not introduce further bugs, but I have no choice
+;; but to advice these functions to behave correctly when working with
+;; ooc/rock.
+(defvar flymake-ooc-default-directory nil
+  "Gets set to most recent project default directory.")
+
+(defadvice flymake-start-syntax-check-process
+  (around flymake-start-syntax-check-process-around)
+  "Actually set the `default-directory'..."
+  (if (ad-get-arg 2)
+      (let ((default-directory (file-name-directory (ad-get-arg 2))))
+        (setq flymake-ooc-default-directory (file-name-directory (ad-get-arg 2)))
+        ad-do-it)
+    ad-do-it))
+(ad-activate 'flymake-start-syntax-check-process)
+
+(defadvice flymake-get-full-patched-file-name
+  (around flymake-get-full-patched-file-name-around)
+  "Also add `flymake-ooc-default-directory' to help out."
+  (ad-set-arg 1 (cons flymake-ooc-default-directory (ad-get-arg 1)))
+  ad-do-it
+  (setq flymake-ooc-default-directory nil))
+(ad-activate 'flymake-get-full-patched-file-name)
+
 (defun flymake-ooc-init ()
   (append (list flymake-ooc-rock-binary
                 (append (flymake-ooc-get-command-line-options)
@@ -95,7 +126,13 @@
                          (flymake-ooc-file-relative-path
                           (ooc-find-root-project)
                           (flymake-init-create-temp-buffer-copy
-                           'flymake-create-temp-inplace)))))))
+                           'flymake-create-temp-inplace))
+                         )
+                        )
+                (flymake-ooc-file-relative-root
+                 (ooc-find-root-project)
+                 (flymake-init-create-temp-buffer-copy
+                  'flymake-create-temp-inplace)))))
 
 (add-to-list 'flymake-allowed-file-name-masks
              '(".+\\.ooc$" flymake-ooc-init))
