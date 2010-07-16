@@ -1,9 +1,10 @@
 %package ooc-wisent-wy
 %languagemode ooc-mode
 
-%start statements
+%start goal
 
 ;; keywords
+%type <keyword>
 ;; Thanks to Mark Fayngersh for a good number of summaries
 ;;    -- [2010-07-14 Wed 23:34]
 %keyword BREAK_KW "break"
@@ -79,8 +80,10 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 
 ;; Simple tokens
 
-%token COMMA         ","
+%token <punctuation> COMMA         ","
 ;;%token DOT           !DOUBLE_DOT "."
+%token <punctuation> DOUBLE_DOT    ".."
+%token <punctuation> DOT           "."
 ;;%token COLON         !ASS_DECL ":"
 
 %token R_ARROW       "->"
@@ -92,7 +95,7 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token ASS_ADD       "+"
 %token ASS_SUB       "-"
 %token ASS_MUL       "*"
-%token ASS_DIV       "/"
+%token <punctuation> ASS_DIV       "/"
 %token ASS_B_RSHIFT  ">>"
 %token ASS_B_LSHIFT  "<<"
 %token ASS_B_XOR     "^"
@@ -152,33 +155,66 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 ;;              )
 ;;%token WS          ([ \t] | Comment | EOL)*
 
+%type <symbol> ;; syntax "\\(\\sw\\|\\s_\\)+" matchdatatype string
+
+%token <symbol> ALPHANUMERIC "[A-Za-z_0-9]+"
+%token <symbol> IDENTIFIER
 
 %%
 
-statements:
-  ' ' KW
+goal
+  : import
   ;
 
-include
-  : INCLUDE_KW
-;;a: NULL_KW
+;; import <path>/<filename>
+;; This only works for the simplest possible cases right now
+import
+  : IMPORT_KW import_path
+    (INCLUDE-TAG $2 nil nil)
+  | IMPORT_KW import_path import_name
+    (INCLUDE-TAG (concat $2 $3) nil nil)
+ ;; | IMPORT_KW import_name
+ ;; (INCLUDE-TAG $2 nil nil)
+  ;
 
+;; [A-Za-z_0-9]+
+import_name
+  : ALPHANUMERIC
+  ;
+
+;; [A-Za-z_0-9.]+
+import_path_part
+  : ALPHANUMERIC
+  | import_path_part DOT ALPHANUMERIC
+    (concat $1 $2 $3);
+
+import_path
+  : ;; Empty
+  | import_path_part ASS_DIV
+    (concat $1 $2)
+  | import_path ASS_DIV import_path_part
+    (progn (print (list $1 $2 $3)) (concat $1 $2 $3))
+  ;
 
 %%
 
 ;; define lexer for this grammar
 (define-lex ooc-lexer
   "Lexical analyzer for ooc."
-  semantic-lex-ignore-whitespace
-  semantic-lex-beginning-of-line
-  semantic-lex-newline
+
+  ;;  semantic-lex-beginning-of-line
+  ;; semantic-lex-newline
   ;;ooc-wisent-wy--<test>
-  ;;  semantic-c-lex-ignore-newline
-  semantic-lex-symbol-or-keyword
+  semantic-lex-ignore-newline
+  ooc-wisent-wy--<keyword>-keyword-analyzer
+  ooc-wisent-wy--<symbol>-regexp-analyzer
+
+  ;;  semantic-lex-symbol-or-keyword
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-ignore-comments
-  semantic-lex-punctuation
+  semantic-lex-punctuation-type
+  semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 

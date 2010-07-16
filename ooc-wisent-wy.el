@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-14 23:39:04+0000
+;; Created: 2010-07-16 01:12:41+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -76,14 +76,12 @@
      ("true" . TRUE_KW)
      ("false" . FALSE_KW)
      ("null" . NULL_KW)
-     ("," . COMMA)
      ("->" . R_ARROW)
      (">" . DOUBLE_ARROW)
      (":" . ASS_DECL)
      ("+" . ASS_ADD)
      ("-" . ASS_SUB)
      ("*" . ASS_MUL)
-     ("/" . ASS_DIV)
      (">>" . ASS_B_RSHIFT)
      ("<<" . ASS_B_LSHIFT)
      ("^" . ASS_B_XOR)
@@ -139,7 +137,17 @@
   "Table of language keywords.")
 
 (defconst ooc-wisent-wy--token-table
-  (semantic-lex-make-type-table 'nil 'nil)
+  (semantic-lex-make-type-table
+   '(("symbol"
+      (IDENTIFIER)
+      (ALPHANUMERIC . "[A-Za-z_0-9]+"))
+     ("punctuation"
+      (ASS_DIV . "/")
+      (DOT . ".")
+      (DOUBLE_DOT . "..")
+      (COMMA . ",")))
+   '(("symbol" :declared t)
+     ("keyword" :declared t)))
   "Table of lexical tokens.")
 
 (defconst ooc-wisent-wy--parse-table
@@ -149,7 +157,7 @@
        (require 'wisent-comp nil t)
        (require 'semantic/wisent/comp nil t)))
     (wisent-compile-grammar
-     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT DOUBLE_DOT L_NOT B_NOT PLUS MINUS PERCENT STAR OPEN_PAREN CLOS_PAREN OPEN_SQUAR CLOS_SQUAR OPEN_BRACK CLOS_BRACK TILDE)
+     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT L_NOT B_NOT PLUS MINUS PERCENT STAR OPEN_PAREN CLOS_PAREN OPEN_SQUAR CLOS_SQUAR OPEN_BRACK CLOS_BRACK TILDE ALPHANUMERIC IDENTIFIER)
        nil
        (KW
         ((BREAK_KW))
@@ -178,9 +186,33 @@
         ((NULL_KW))
         ((MATCH_KW))
         ((CASE_KW)))
-       (statements
-        ((32 KW))))
-     '(statements)))
+       (goal
+        ((import)))
+       (import
+        ((IMPORT_KW import_path)
+         (wisent-raw-tag
+          (semantic-tag-new-include $2 nil nil)))
+        ((IMPORT_KW import_path import_name)
+         (wisent-raw-tag
+          (semantic-tag-new-include
+           (concat $2 $3)
+           nil nil))))
+       (import_name
+        ((ALPHANUMERIC)))
+       (import_path_part
+        ((ALPHANUMERIC))
+        ((import_path_part DOT ALPHANUMERIC)
+         (concat $1 $2 $3)))
+       (import_path
+        (nil)
+        ((import_path_part ASS_DIV)
+         (concat $1 $2))
+        ((import_path ASS_DIV import_path_part)
+         (progn
+           (print
+            (list $1 $2 $3))
+           (concat $1 $2 $3)))))
+     '(goal)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()
@@ -203,23 +235,37 @@
 (require 'semantic-lex nil t)
 (require 'semantic/lex nil t)
 
+(define-lex-keyword-type-analyzer ooc-wisent-wy--<keyword>-keyword-analyzer
+  "keyword analyzer for <keyword> tokens."
+  "\\(\\sw\\|\\s_\\)+")
+
+(define-lex-regex-type-analyzer ooc-wisent-wy--<symbol>-regexp-analyzer
+  "regexp analyzer for <symbol> tokens."
+  "\\(\\sw\\|\\s_\\)+"
+  '((ALPHANUMERIC . "[A-Za-z_0-9]+"))
+  'IDENTIFIER)
+
 
 ;;; Epilogue
 ;;
 ;; define lexer for this grammar
 (define-lex ooc-lexer
   "Lexical analyzer for ooc."
-  semantic-lex-ignore-whitespace
-  semantic-lex-beginning-of-line
-  semantic-lex-newline
+
+  ;;  semantic-lex-beginning-of-line
+  ;; semantic-lex-newline
   ;;ooc-wisent-wy--<test>
-  ;;  semantic-c-lex-ignore-newline
-  semantic-lex-symbol-or-keyword
+  semantic-lex-ignore-newline
+  ooc-wisent-wy--<keyword>-keyword-analyzer
+  ooc-wisent-wy--<symbol>-regexp-analyzer
+
+  ;;  semantic-lex-symbol-or-keyword
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-ignore-comments
-  semantic-lex-punctuation
+  semantic-lex-punctuation-type
+  semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 
 (provide 'ooc-wisent-wy)
