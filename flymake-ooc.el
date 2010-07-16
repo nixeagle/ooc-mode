@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 26
+;;     Update #: 27
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -120,8 +120,13 @@
 (ad-activate 'flymake-get-full-patched-file-name)
 
 (defun flymake-ooc-init ()
-  (append (list flymake-ooc-rock-binary
-                (append (flymake-ooc-get-command-line-options)
+  (append (list (or ooc-rock-binary
+                    (expand-file-name "bin/rock" ooc-rock-dist))
+                (append
+                 (list (concat "-sdk="
+                               (or ooc-rock-sdk
+                                   (expand-file-name "sdk" ooc-rock-dist))))
+                 (flymake-ooc-get-command-line-options)
                         (list
                          (flymake-ooc-file-relative-path
                           (ooc-find-root-project)
