@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 130
+;;     Update #: 131
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -291,6 +291,7 @@ These cover classes, functions, templates, and variables.")
                  ;; a ',' char.
                  (arglist-cont-nonempty . +)
                  (brace-list-entry . (first ooc-lineup-multiline-case-statement
+                                            ooc-lineup-oneline-if-statement
                                             0))
                  (topmost-intro .
                                 (first ooc-lineup-oneline-if-statement
