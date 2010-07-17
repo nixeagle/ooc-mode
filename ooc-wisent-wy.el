@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 05:09:49+0000
+;; Created: 2010-07-17 06:52:12+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -215,13 +215,20 @@
         ((MATCH_KW))
         ((CASE_KW)))
        (goal
-        ((value_core))
+        ((alphanumeric_dot)
+         (wisent-raw-tag
+          (semantic-tag "TOPLEVEL" 'top! :thing $1))))
+       (statement
+        ((import))
         ((tuple))
-        ((import)))
+        ((expression)))
        (import
         ((IMPORT_KW import_atom)
          (identity $2)))
        (import_atom
+        ((import_name)
+         (wisent-raw-tag
+          (semantic-tag-new-include $1 nil :file $1)))
         ((import_path import_name)
          (wisent-raw-tag
           (semantic-tag-new-include
@@ -234,17 +241,20 @@
            nil :file $2 :into $4))))
        (import_name
         ((ALPHANUMERIC)))
-       (import_path_part
-        ((ALPHANUMERIC))
-        ((import_path_part DOT ALPHANUMERIC)
-         (concat $1 $2 $3)))
        (import_path
         (nil)
         ((import_path_part ASS_DIV)
-         (concat $1 $2))
+         (progn
+           (print $1)
+           (concat $1 $2)))
         ((import_path ASS_DIV import_path_part)
          (progn
+           (print
+            (format "%s %s" $1 $3))
            (concat $1 $2 $3))))
+       (import_path_part
+        ((import_path_part DOT ALPHANUMERIC)
+         (concat $1 $2 $3)))
        (comment
         (nil))
        (array_literal
@@ -268,7 +278,9 @@
          (wisent-raw-tag
           (semantic-tag-new-code $2 nil nil nil :tuple t))))
        (expression
-        ((value_core)))
+        ((value_core)
+         (wisent-raw-tag
+          (semantic-tag-new-code $1 nil nil))))
        (value_core
         ((number_literal))
         ((STRING_LITERAL))
@@ -287,6 +299,28 @@
        (identifier
         ((ALPHANUMERIC))
         ((IDENTIFIER)))
+       (alphanumeric_dot
+        ((dots_rest ALPHANUMERIC dots_rest)
+         (concat $1 $2 $3))
+        ((alphanumeric_dot ALPHANUMERIC dots_rest)
+         (concat $1 $2 $3)))
+       (dot_optional
+        (nil)
+        ((DOT)))
+       (dot_rest
+        ((dot_optional))
+        ((dot_rest dot_optional)))
+       (dots_optional
+        (nil)
+        ((DOTS)))
+       (dots_rest
+        (nil)
+        ((DOTS))
+        ((dots_rest DOTS)
+         (concat $1 $2)))
+       (DOTS
+        ((DOT))
+        ((DOUBLE_DOT)))
        (WHITESPACE
         (nil)
         ((SPACES))

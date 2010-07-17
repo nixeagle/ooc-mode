@@ -204,10 +204,16 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %%
 
 goal
-  : value_core
-  | tuple
-  | import
+  : alphanumeric_dot
+    (TAG "TOPLEVEL" 'top! :thing $1)
   ;
+
+statement
+  : import
+  | tuple
+  | expression
+  ;
+
 
 
 
@@ -219,7 +225,9 @@ import
   ;
 
 import_atom
-  : import_path import_name
+  : import_name
+    (INCLUDE-TAG $1 nil :file $1)
+  | import_path import_name
     (INCLUDE-TAG (concat $1 $2) nil :file $2)
   | import_path import_name INTO_KW identifier
     (INCLUDE-TAG (concat $1 $2) nil :file $2 :into $4)
@@ -229,19 +237,19 @@ import_name
   : ALPHANUMERIC
   ;
 
-;; [A-Za-z_0-9.]+
-import_path_part
-  : ALPHANUMERIC
-  | import_path_part DOT ALPHANUMERIC
-    (concat $1 $2 $3);
-
 import_path
   : ;; Empty
   | import_path_part ASS_DIV
-    (concat $1 $2)
+    (progn (print $1) (concat $1 $2))
   | import_path ASS_DIV import_path_part
-    (progn (concat $1 $2 $3))
+    (progn (print (format "%s %s" $1 $3)) (concat $1 $2 $3))
   ;
+
+;; [A-Za-z_0-9.]+
+import_path_part
+;;: ALPHANUMERIC
+  : import_path_part DOT ALPHANUMERIC
+    (concat $1 $2 $3);
 
 comment
   : ;; EMPTY
@@ -269,8 +277,8 @@ tuple_item
 
 expression
   : value_core
- ;;(CODE-TAG $1 nil nil)
-;
+    (CODE-TAG $1 nil nil)
+  ;
 
 value_core
   : number_literal
@@ -302,6 +310,42 @@ integer_literal
 identifier
   : ALPHANUMERIC
   | IDENTIFIER
+  ;
+
+alphanumeric_dot
+  : dots_rest ALPHANUMERIC dots_rest
+    (concat $1 $2 $3)
+  | alphanumeric_dot ALPHANUMERIC dots_rest
+    (concat $1 $2 $3)
+  ;
+
+;; ['.'] regex: \.?
+dot_optional
+  : ;;EMPTY
+  | DOT
+  ;
+
+dot_rest
+  : dot_optional
+  | dot_rest dot_optional
+  ;
+
+dots_optional
+  : ;; EMPTY
+  | DOTS
+  ;
+
+dots_rest
+  : ;;EMPTY
+  | DOTS
+  | dots_rest DOTS
+    (concat $1 $2)
+  ;
+
+;; One or two dots...
+DOTS
+  : DOT
+  | DOUBLE_DOT
   ;
 ;; Match all types of whitespace including comments (treat them as
 ;; whitespace for now...).
