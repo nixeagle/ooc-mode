@@ -290,7 +290,9 @@ These cover classes, functions, templates, and variables.")
                  ;; this by looking for |...| just after
                  ;; a ',' char.
                  (arglist-cont-nonempty . +)
-                 (brace-list-entry . +)
+                 (brace-list-entry . (first ooc-lineup-multiline-case-statement
+                                            ooc-lineup-oneline-if-statement
+                                            0))
                  (topmost-intro .
                                 (first ooc-lineup-oneline-if-statement
                                        ooc-lineup-oneline-else-statement
@@ -301,6 +303,10 @@ These cover classes, functions, templates, and variables.")
                                      0))
                  (arglist-close . 0)))))
 
+(defun ooc-lineup-multiline-case-statement (langelem)
+  (save-excursion
+    (when (looking-back "case.*=>[^{}]+")
+      '+)))
 (defun ooc-lineup-oneline-if-statement (langelem)
   (save-excursion
     (when (looking-back "if\s*([^)]*)\s*\n.*")
@@ -391,10 +397,11 @@ Please use `ooc-rock-binary'."
   :group 'flymake-ooc
   :type 'string)
 
-(defcustom ooc-rock-binary flymake-ooc-rock-binary
+(defcustom ooc-rock-binary nil
   "Location of the rock compiler executable."
   :group 'ooc
-  :type 'string)
+  :type '(choice (const :tag "Same location as rock dist" nil)
+                 (string :tag "Alternate global binary")))
 
 (defcustom flymake-ooc-rock-command-line-options '("-onlycheck")
   "Commandline options to pass to rock while running flymake.
@@ -405,6 +412,20 @@ until they are released. Feel free to customize this variable to
 use them now if you are using the git version of rock."
   :group 'flymake-ooc
   :type '(repeat (string)))
+
+(defcustom ooc-rock-dist "~/rock"
+  "Location of the rock distribution.
+
+This will define the default location of rock as well as the
+default location of the rock sdk."
+  :group 'ooc
+  :type 'directory)
+
+(defcustom ooc-rock-sdk nil
+  "Location of the rock sdk if seperate from `ooc-rock-dist'."
+  :group 'ooc
+  :type '(choice (const :tag "Same location as rock dist" nil)
+                 (directory :tag "Alternate global sdk directory.")))
 
 (defun ooc-run-single-file ()
   "Run file in current buffer."
