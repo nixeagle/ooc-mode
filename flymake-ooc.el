@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 28
+;;     Update #: 29
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -124,6 +124,10 @@
                 (append
                  (list (concat "-sdk=" (ooc-rock-sdk-path)))
                  (flymake-ooc-get-command-line-options)
+                 ;; Rock bug as of [2010-07-17 Sat 04:23] causes problems
+                 ;; just looking for class completion... so lets turn it
+                 ;; off to prevent flymake stoppages.
+                 "-nohints"
                         (list
                          (flymake-ooc-file-relative-path
                           (ooc-find-root-project)
