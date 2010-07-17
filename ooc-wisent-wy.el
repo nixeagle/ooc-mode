@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 00:47:39+0000
+;; Created: 2010-07-17 03:03:10+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -372,6 +372,13 @@
 
 ;;; Epilogue
 ;;
+(define-lex-regex-analyzer semantic-lex-ignore-all
+  "Detect and ignore newline tokens.
+Use this ONLY if newlines are not whitespace characters (such as when
+they are comment end characters)."
+  "."
+  (setq semantic-lex-end-point (match-end 0)))
+
 ;; define lexer for this grammar
 (define-lex ooc-lexer
   "Lexical analyzer for ooc."
@@ -383,15 +390,18 @@
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
   ;;  ooc-wisent-wy--<whitespace>-regexp-analyzer
-  ooc-wisent-wy--<newline>-regexp-analyzer
+  ;;  ooc-wisent-wy--<newline>-regexp-analyzer
 
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  ;;  semantic-lex-newline
+  semantic-lex-ignore-newline
   semantic-lex-ignore-whitespace
-  semantic-lex-default-action)
+  semantic-lex-comments
+  semantic-lex-ignore-all
+  semantic-lex-default-action
+)
 
 (provide 'ooc-wisent-wy)
 
