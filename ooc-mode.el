@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 133
+;;     Update #: 134
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -478,6 +478,16 @@ default location of the rock sdk."
   "Return location of rock's sdk path or PROJECT-PATH."
   (or project-path ooc-rock-sdk
       (expand-file-name "sdk" ooc-rock-dist)))
+
+;; Semantic overloads
+(define-mode-local-override semantic-dependency-tag-file
+  ooc-mode (&optional tag)
+  "Finds file represented by TAG."
+  (let ((tag (or tag (car (semantic-find-tag-by-overlay nil)))))
+    (unless (semantic-tag-of-class-p tag 'include)
+      (signal 'wrong-type-argument (list tag 'include)))
+    (expand-file-name (concat (semantic-tag-include-filename tag) ".ooc")
+                      (ooc-rock-sdk-path))))
 
 (defun nix.lex-test ()
   (interactive)

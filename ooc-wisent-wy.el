@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-16 21:50:14+0000
+;; Created: 2010-07-16 23:33:52+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -218,16 +218,22 @@
         ((value_core)
          (wisent-raw-tag
           (semantic-tag-new-code $1 nil nil)))
-        ((tuple)))
+        ((tuple))
+        ((import)))
        (import
-        ((IMPORT_KW import_path)
-         (wisent-raw-tag
-          (semantic-tag-new-include $2 nil nil)))
-        ((IMPORT_KW import_path import_name)
+        ((IMPORT_KW import_atom)
+         (identity $2)))
+       (import_atom
+        ((import_path import_name)
          (wisent-raw-tag
           (semantic-tag-new-include
-           (concat $2 $3)
-           nil nil))))
+           (concat $1 $2)
+           nil nil)))
+        ((import_name import_name INTO_KW IDENTIFIER)
+         (wisent-raw-tag
+          (semantic-tag-new-include
+           (concat $1 $2)
+           nil nil :into $4))))
        (import_name
         ((ALPHANUMERIC)))
        (import_path_part
@@ -376,15 +382,15 @@
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
-  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ;;  ooc-wisent-wy--<whitespace>-regexp-analyzer
   ooc-wisent-wy--<newline>-regexp-analyzer
 
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-newline
-  semantic-lex-whitespace
+  ;;  semantic-lex-newline
+  semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 
 (provide 'ooc-wisent-wy)

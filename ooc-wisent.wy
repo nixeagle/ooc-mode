@@ -206,7 +206,8 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 goal
   : value_core
     (CODE-TAG $1 nil nil)
-   | tuple
+  | tuple
+  | import
   ;
 
 
@@ -214,14 +215,16 @@ goal
 ;; import <path>/<filename>
 ;; This only works for the simplest possible cases right now
 import
-  : IMPORT_KW import_path
-    (INCLUDE-TAG $2 nil nil)
-  | IMPORT_KW import_path import_name
-    (INCLUDE-TAG (concat $2 $3) nil nil)
- ;; | IMPORT_KW import_name
- ;; (INCLUDE-TAG $2 nil nil)
+  : IMPORT_KW import_atom
+    (identity $2)
   ;
 
+import_atom
+  : import_path import_name
+    (INCLUDE-TAG (concat $1 $2) nil nil)
+  | import_name import_name INTO_KW IDENTIFIER
+    (INCLUDE-TAG (concat $1 $2) nil nil :into $4)
+  ;
 ;; [A-Za-z_0-9]+
 import_name
   : ALPHANUMERIC
@@ -320,14 +323,14 @@ BOOLEAN_LITERAL
   ooc-wisent-wy--<block>-block-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<symbol>-regexp-analyzer
-  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ;;  ooc-wisent-wy--<whitespace>-regexp-analyzer
   ooc-wisent-wy--<newline>-regexp-analyzer
 
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-newline
-  semantic-lex-whitespace
+  ;;  semantic-lex-newline
+  semantic-lex-ignore-whitespace
   semantic-lex-default-action)
 
