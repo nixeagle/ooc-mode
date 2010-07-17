@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 136
+;;     Update #: 142
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -53,8 +53,8 @@
 
 (require 'semantic)
 (require 'cedet)
-(require 'ooc-wisent-wy)
 
+(require 'ooc-wisent-wy)
 
 ;; Ugly fix to shut this annoying errors because of a depreciation
 ;; function being fed 3 arguments instead of 2.
@@ -107,6 +107,10 @@ will throw a warning WHEN it encounters this symbol."
        byte-compile-current-file
        newfn
        (semantic-overload-symbol-from-function oldfnalias)))))
+
+;(require 'semantic/decorate/include nil t)
+(or (require 'semantic-decorate-include nil t)
+    (require 'semantic-decorate))
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
@@ -460,6 +464,8 @@ default location of the rock sdk."
        'ooc-lexer)
   (setq semantic-lex-syntax-table ooc-mode-syntax-table)
   (ooc-wisent-wy--install-parser)
+  (semantic-new-buffer-fcn)
+  (semantic-decoration-mode)
   (c-set-style "ooc")
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
