@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 03:03:10+0000
+;; Created: 2010-07-17 03:27:59+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -384,6 +384,9 @@ they are comment end characters)."
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
+  semantic-lex-ignore-comments
+  semantic-lex-ignore-newline
+  semantic-lex-ignore-whitespace
   ooc-wisent-wy--<number>-regexp-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
@@ -396,9 +399,8 @@ they are comment end characters)."
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-whitespace
-  semantic-lex-comments
+
+
   semantic-lex-ignore-all
   semantic-lex-default-action
 )
