@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 03:27:59+0000
+;; Created: 2010-07-17 04:44:58+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -228,12 +228,10 @@
          (wisent-raw-tag
           (semantic-tag-new-include
            (concat $1 $2)
-           nil nil)))
-        ((import_name import_name INTO_KW IDENTIFIER)
+           $2)))
+        ((import_path import_name INTO_KW identifier)
          (wisent-raw-tag
-          (semantic-tag-new-include
-           (concat $1 $2)
-           nil nil :into $4))))
+          (semantic-tag-new-code $1 nil :file $2 :into $4))))
        (import_name
         ((ALPHANUMERIC)))
        (import_path_part
@@ -290,6 +288,9 @@
         ((OCT_LITERAL))
         ((HEX_LITERAL))
         ((DEC_LITERAL)))
+       (identifier
+        ((ALPHANUMERIC))
+        ((IDENTIFIER)))
        (WHITESPACE
         (nil)
         ((SPACES))

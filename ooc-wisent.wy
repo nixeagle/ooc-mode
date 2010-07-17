@@ -221,9 +221,9 @@ import
 
 import_atom
   : import_path import_name
-    (INCLUDE-TAG (concat $1 $2) nil nil)
-  | import_name import_name INTO_KW IDENTIFIER
-    (INCLUDE-TAG (concat $1 $2) nil nil :into $4)
+    (INCLUDE-TAG (concat $1 $2) $2 :file $2)
+  | import_path import_name INTO_KW identifier
+    (INCLUDE-TAG (concat $1 $2) $2 :file $2 :into $4)
   ;
 ;; [A-Za-z_0-9]+
 import_name
@@ -299,6 +299,11 @@ integer_literal
   | DEC_LITERAL
   ;
 
+;; A valid identifier for a symbol
+identifier
+  : ALPHANUMERIC
+  | IDENTIFIER
+  ;
 ;; Match all types of whitespace including comments (treat them as
 ;; whitespace for now...).
 WHITESPACE

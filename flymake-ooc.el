@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 29
+;;     Update #: 30
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -128,13 +128,11 @@
                  ;; just looking for class completion... so lets turn it
                  ;; off to prevent flymake stoppages.
                  "-nohints"
-                        (list
-                         (flymake-ooc-file-relative-path
-                          (ooc-find-root-project)
-                          (flymake-init-create-temp-buffer-copy
-                           'flymake-create-temp-inplace))
-                         )
-                        )
+                 (list
+                  (flymake-ooc-file-relative-path
+                   (ooc-find-root-project)
+                   (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-inplace))))
                 (flymake-ooc-file-relative-root
                  (ooc-find-root-project)
                  (flymake-init-create-temp-buffer-copy
