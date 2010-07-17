@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 31
+;;     Update #: 32
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -122,7 +122,7 @@
 (defun flymake-ooc-init ()
   (append (list (ooc-rock-binary)
                 (append
-                 (list (concat "-sdk=" (ooc-rock-sdk-path)))
+                 (list (concat "-dist=" (ooc-rock-dist)))
                  (flymake-ooc-get-command-line-options)
                  ;; Rock bug as of [2010-07-17 Sat 04:23] causes problems
                  ;; just looking for class completion... so lets turn it
