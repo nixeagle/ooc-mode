@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 142
+;;     Update #: 143
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -110,7 +110,7 @@ will throw a warning WHEN it encounters this symbol."
 
 ;(require 'semantic/decorate/include nil t)
 (or (require 'semantic-decorate-include nil t)
-    (require 'semantic-decorate))
+    (require 'semantic/decorate/include nil t))
 
 (defgroup ooc nil
   "Settings for ooc-mode.")
