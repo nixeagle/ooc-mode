@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 134
+;;     Update #: 136
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -458,9 +458,6 @@ default location of the rock sdk."
        'ooc-indent-line)
   (set (make-local-variable 'semantic-lex-analyzer)
        'ooc-lexer)
-  (set (make-local-variable 'wisent-discarding-token-functions)
-       (list (lambda (token)
-               (print token))))
   (setq semantic-lex-syntax-table ooc-mode-syntax-table)
   (ooc-wisent-wy--install-parser)
   (c-set-style "ooc")
@@ -496,6 +493,9 @@ default location of the rock sdk."
   (with-current-buffer "lex-test.ooc"
     (setq semantic-lex-syntax-table ooc-mode-syntax-table)
     (ooc-wisent-wy--install-parser)
+    (set (make-local-variable 'wisent-discarding-token-functions)
+       (list (lambda (token)
+               (print token))))
                                         ;(erase-buffer)
  ;;   (ooc-mode)
                                         ;(insert .string)
