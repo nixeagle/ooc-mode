@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 04:44:58+0000
+;; Created: 2010-07-17 05:09:49+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -215,9 +215,7 @@
         ((MATCH_KW))
         ((CASE_KW)))
        (goal
-        ((value_core)
-         (wisent-raw-tag
-          (semantic-tag-new-code $1 nil nil)))
+        ((value_core))
         ((tuple))
         ((import)))
        (import
@@ -228,10 +226,12 @@
          (wisent-raw-tag
           (semantic-tag-new-include
            (concat $1 $2)
-           $2)))
+           nil :file $2)))
         ((import_path import_name INTO_KW identifier)
          (wisent-raw-tag
-          (semantic-tag-new-code $1 nil :file $2 :into $4))))
+          (semantic-tag-new-include
+           (concat $1 $2)
+           nil :file $2 :into $4))))
        (import_name
         ((ALPHANUMERIC)))
        (import_path_part
@@ -244,8 +244,6 @@
          (concat $1 $2))
         ((import_path ASS_DIV import_path_part)
          (progn
-           (print
-            (list $1 $2 $3))
            (concat $1 $2 $3))))
        (comment
         (nil))
@@ -270,9 +268,7 @@
          (wisent-raw-tag
           (semantic-tag-new-code $2 nil nil nil :tuple t))))
        (expression
-        ((value_core)
-         (wisent-raw-tag
-          (semantic-tag-new-code $1 nil nil))))
+        ((value_core)))
        (value_core
         ((number_literal))
         ((STRING_LITERAL))
