@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 132
+;;     Update #: 133
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -467,6 +467,17 @@ default location of the rock sdk."
   (run-hooks 'c-mode-common-hook)
   (run-hooks 'ooc-mode-hook)
   (c-update-modeline))
+
+
+(defun ooc-rock-binary ()
+  "Return location of rock's binary."
+  (or ooc-rock-binary
+      (expand-file-name "bin/rock" ooc-rock-dist)))
+
+(defun ooc-rock-sdk-path (&optional project-path)
+  "Return location of rock's sdk path or PROJECT-PATH."
+  (or project-path ooc-rock-sdk
+      (expand-file-name "sdk" ooc-rock-dist)))
 
 (defun nix.lex-test ()
   (interactive)
