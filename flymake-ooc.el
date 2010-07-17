@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 30
+;;     Update #: 31
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -127,7 +127,7 @@
                  ;; Rock bug as of [2010-07-17 Sat 04:23] causes problems
                  ;; just looking for class completion... so lets turn it
                  ;; off to prevent flymake stoppages.
-                 "-nohints"
+                 (list "-nohints")
                  (list
                   (flymake-ooc-file-relative-path
                    (ooc-find-root-project)
