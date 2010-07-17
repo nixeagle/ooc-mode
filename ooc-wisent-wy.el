@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 06:52:12+0000
+;; Created: 2010-07-17 07:02:22+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -215,9 +215,7 @@
         ((MATCH_KW))
         ((CASE_KW)))
        (goal
-        ((alphanumeric_dot)
-         (wisent-raw-tag
-          (semantic-tag "TOPLEVEL" 'top! :thing $1))))
+        ((statement)))
        (statement
         ((import))
         ((tuple))

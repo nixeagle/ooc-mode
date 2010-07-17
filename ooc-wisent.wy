@@ -204,8 +204,9 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %%
 
 goal
-  : alphanumeric_dot
-    (TAG "TOPLEVEL" 'top! :thing $1)
+  : statement
+ ;;  | alphanumeric_dot
+ ;; (TAG "TOPLEVEL" 'top! :thing $1)
   ;
 
 statement
