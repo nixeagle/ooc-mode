@@ -86,14 +86,14 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 ;;%token DOT           !DOUBLE_DOT "."
 %token <punctuation> DOUBLE_DOT    ".."
 %token <punctuation> DOT           "."
-;;%token COLON         !ASS_DECL ":"
+%token <punctuation> COLON          ":"
 
-%token R_ARROW       "->"
-%token DOUBLE_ARROW  ">"
+;;%token R_ARROW       "->"
+;;%token DOUBLE_ARROW  "=>"
 
 ;; Operators
 %token <punctuation> ASS_DECL      ":="
-;;%token ASS           !DOUBLE_ARROW ""
+%token <punctuation> ASS            "="
 %token <punctuation> ASS_ADD       "+="
 %token <punctuation> ASS_SUB       "-="
 %token <punctuation> ASS_MUL       "*="
@@ -106,32 +106,32 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token <punctuation> ASS_B_OR      "|="
 %token <punctuation> ASS_B_AND     "&="
 
-%token QUEST         "?"
+%token <punctuation> QUESTION         "?"
 
-%token L_OR          "||"
+%token <punctuation> LOGIC_OR          "||"
 
-%token L_AND         "&&"
+%token <punctuation> LOGIC_AND         "&&"
 
-;;%token B_OR          !L_OR "|"
+%token <punctuation> BINARY_OR     "|"
 
-%token B_XOR         "^"
+%token <punctuation> BINARY_XOR         "^"
 
-;;%token B_AND         !L_AND "&"
+%token <punctuation> BINARY_AND     "&"
 
-%token EQUALS        "=="
-%token NOT_EQUALS    "!="
+%token <punctuation> EQUALS        "=="
+%token <punctuation> NOT_EQUALS    "!="
 
-%token LESSTHAN      "<"
-%token MORETHAN      ">"
-%token CMP           "<=>"
-%token LESSTHAN_EQ   "<="
-%token MORETHAN_EQ   ">="
+%token <punctuation> LESSTHAN      "<"
+%token <punctuation> MORETHAN      ">"
+%token <punctuation> CMP           "<=>"
+%token <punctuation> LESSTHAN_EQ   "<="
+%token <punctuation> MORETHAN_EQ   ">="
 
-%token B_LSHIFT      "<<"
-%token B_RSHIFT      ">>"
+%token <punctuation> BINARY_LSHIFT      "<<"
+%token <punctuation> BINARY_RSHIFT      ">>"
 
-%token L_NOT         "!"
-%token B_NOT         "~"
+%token <punctuation> LOGIC_NOT         "!"
+%token <punctuation> BINARY_NOT         "~"
 %token <punctuation> PLUS          "+"
 %token <punctuation> MINUS         "-"
 
