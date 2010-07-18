@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-18 23:29:54+0000
+;; Created: 2010-07-18 23:35:02+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -233,9 +233,7 @@
        (ternary
         ((expression QUESTION expression COLON expression)))
        (expression
-        ((value_core)
-         (wisent-raw-tag
-          (semantic-tag-new-code $1 nil nil))))
+        ((value_core)))
        (bracketed_block
         ((BRACKET_BLOCK)
          (progn
@@ -251,7 +249,7 @@
          nil)
         ((expression)
          (progn
-           (print expression)
+           (print $1)
            (wisent-raw-tag
             (semantic-tag-new-code $1 nil nil)))))
        (value_core
