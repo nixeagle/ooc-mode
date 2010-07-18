@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 144
+;;     Update #: 145
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -494,6 +494,8 @@ default location of the rock sdk."
 
 (defun nix.lex-test ()
   (interactive)
+  (with-current-buffer "*wisent-log*"
+    (erase-buffer))
   (with-current-buffer "*Messages*"
     (erase-buffer))
   (with-current-buffer "ooc-wisent.wy"

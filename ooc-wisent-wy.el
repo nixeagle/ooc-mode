@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-17 07:02:22+0000
+;; Created: 2010-07-18 01:01:24+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -132,11 +132,7 @@
 
 (defconst ooc-wisent-wy--token-table
   (semantic-lex-make-type-table
-   '(("newline"
-      (EOL))
-     ("whitespace"
-      (SPACES))
-     ("symbol"
+   '(("symbol"
       (IDENTIFIER)
       (ALPHANUMERIC . "[A-Za-z_0-9]+"))
      ("string"
@@ -185,7 +181,7 @@
        (require 'wisent-comp nil t)
        (require 'semantic/wisent/comp nil t)))
     (wisent-compile-grammar
-     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT L_NOT B_NOT PLUS MINUS PERCENT STAR PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER SPACES EOL)
+     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUEST L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ B_LSHIFT B_RSHIFT L_NOT B_NOT PLUS MINUS PERCENT STAR PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
        nil
        (KW
         ((BREAK_KW))
@@ -219,42 +215,25 @@
        (statement
         ((import))
         ((tuple))
-        ((expression)))
+        ((expression))
+        ((KW)))
        (import
-        ((IMPORT_KW import_atom)
+        ((IMPORT_KW import_list)
          (identity $2)))
+       (import_list
+        ((import_atom))
+        ((import_list COMMA import_atom)))
        (import_atom
-        ((import_name)
+        ((import_atom_part))
+        ((import_atom_part INTO_KW identifier)))
+       (import_atom_part
+        ((import_path)
          (wisent-raw-tag
-          (semantic-tag-new-include $1 nil :file $1)))
-        ((import_path import_name)
-         (wisent-raw-tag
-          (semantic-tag-new-include
-           (concat $1 $2)
-           nil :file $2)))
-        ((import_path import_name INTO_KW identifier)
-         (wisent-raw-tag
-          (semantic-tag-new-include
-           (concat $1 $2)
-           nil :file $2 :into $4))))
-       (import_name
-        ((ALPHANUMERIC)))
+          (semantic-tag-new-include $1 nil :file $1))))
        (import_path
-        (nil)
-        ((import_path_part ASS_DIV)
-         (progn
-           (print $1)
-           (concat $1 $2)))
-        ((import_path ASS_DIV import_path_part)
-         (progn
-           (print
-            (format "%s %s" $1 $3))
-           (concat $1 $2 $3))))
-       (import_path_part
-        ((import_path_part DOT ALPHANUMERIC)
+        ((alphanumeric_dot))
+        ((import_path ASS_DIV alphanumeric_dot)
          (concat $1 $2 $3)))
-       (comment
-        (nil))
        (array_literal
         ((SQUARE_BLOCK)
          (semantic-bovinate-from-nonterminal
@@ -319,11 +298,6 @@
        (DOTS
         ((DOT))
         ((DOUBLE_DOT)))
-       (WHITESPACE
-        (nil)
-        ((SPACES))
-        ((EOL))
-        ((comment)))
        (BOOLEAN_LITERAL
         ((TRUE_KW))
         ((FALSE_KW))))
@@ -369,7 +343,7 @@
   "regexp analyzer for <whitespace> tokens."
   "\\([ ]+\\)"
   nil
-  'SPACES)
+  'whitespace)
 
 (define-lex-sexp-type-analyzer ooc-wisent-wy--<string>-sexp-analyzer
   "sexp analyzer for <string> tokens."
@@ -396,7 +370,7 @@
   "regexp analyzer for <newline> tokens."
   "\\(\n\\| >\\)"
   nil
-  'EOL)
+  'newline)
 
 
 ;;; Epilogue
