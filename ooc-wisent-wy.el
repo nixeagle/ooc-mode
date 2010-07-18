@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-18 22:48:40+0000
+;; Created: 2010-07-18 23:07:28+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -76,11 +76,6 @@
      ("true" . TRUE_KW)
      ("false" . FALSE_KW)
      ("null" . NULL_KW)
-     ("->" . R_ARROW)
-     (">" . DOUBLE_ARROW)
-     ("||" . L_OR)
-     ("&&" . L_AND)
-     ("^" . B_XOR)
      ("~" . TILDE))
    '(("as" summary "TYPE as ANOTHERTYPE")
      ("for" summary "for (NAME in [List|Range|1..10]) {...}")
@@ -146,6 +141,11 @@
       (LESSTHAN . "<")
       (NOT_EQUALS . "!=")
       (EQUALS . "==")
+      (BINARY_AND . "&")
+      (BINARY_XOR . "^")
+      (BINARY_OR . "|")
+      (LOGIC_AND . "&&")
+      (LOGIC_OR . "||")
       (QUESTION . "?")
       (ASS_B_AND . "&=")
       (ASS_B_OR . "|=")
@@ -158,7 +158,9 @@
       (ASS_MUL . "*=")
       (ASS_SUB . "-=")
       (ASS_ADD . "+=")
+      (ASS . "=")
       (ASS_DECL . ":=")
+      (COLON . ":")
       (DOT . ".")
       (DOUBLE_DOT . "..")
       (COMMA . ",")))
@@ -181,41 +183,14 @@
        (require 'wisent-comp nil t)
        (require 'semantic/wisent/comp nil t)))
     (wisent-compile-grammar
-     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT R_ARROW DOUBLE_ARROW ASS_DECL ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION L_OR L_AND B_XOR EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
+     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT COLON ASS_DECL ASS ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION LOGIC_OR LOGIC_AND BINARY_OR BINARY_XOR BINARY_AND EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
        nil
-       (KW
-        ((BREAK_KW))
-        ((CONTINUE_KW))
-        ((RETURN_KW))
-        ((FUNC_KW))
-        ((COVER_KW))
-        ((ENUM_KW))
-        ((FROM_KW))
-        ((ABSTRACT_KW))
-        ((FINAL_KW))
-        ((STATIC_KW))
-        ((INLINE_KW))
-        ((EXTENDS_KW))
-        ((EXTERN_KW))
-        ((UNMANGLED_KW))
-        ((IMPORT_KW))
-        ((INCLUDE_KW))
-        ((IF_KW))
-        ((ELSE_KW))
-        ((FOR_KW))
-        ((WHILE_KW))
-        ((AS_KW))
-        ((OPERATOR_KW))
-        ((CONST_KW))
-        ((NULL_KW))
-        ((MATCH_KW))
-        ((CASE_KW)))
        (goal
         ((statement)))
        (statement
         ((import))
         ((tuple))
-        ((expression))
+        ((ternary))
         ((KW)))
        (import
         ((IMPORT_KW import_list)
@@ -254,6 +229,8 @@
         ((OPEN_PAREN expression CLOSE_PAREN)
          (wisent-raw-tag
           (semantic-tag-new-code $2 nil nil nil :tuple t))))
+       (ternary
+        ((expression QUESTION expression COLON expression)))
        (expression
         ((value_core)
          (wisent-raw-tag
@@ -300,7 +277,34 @@
         ((DOUBLE_DOT)))
        (BOOLEAN_LITERAL
         ((TRUE_KW))
-        ((FALSE_KW))))
+        ((FALSE_KW)))
+       (KW
+        ((BREAK_KW))
+        ((CONTINUE_KW))
+        ((RETURN_KW))
+        ((FUNC_KW))
+        ((COVER_KW))
+        ((ENUM_KW))
+        ((FROM_KW))
+        ((ABSTRACT_KW))
+        ((FINAL_KW))
+        ((STATIC_KW))
+        ((INLINE_KW))
+        ((EXTENDS_KW))
+        ((EXTERN_KW))
+        ((UNMANGLED_KW))
+        ((IMPORT_KW))
+        ((INCLUDE_KW))
+        ((IF_KW))
+        ((ELSE_KW))
+        ((FOR_KW))
+        ((WHILE_KW))
+        ((AS_KW))
+        ((OPERATOR_KW))
+        ((CONST_KW))
+        ((NULL_KW))
+        ((MATCH_KW))
+        ((CASE_KW))))
      '(goal tuple_item array_literal_item)))
   "Parser table.")
 

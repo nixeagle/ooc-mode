@@ -72,13 +72,7 @@
 
 %keyword NULL_KW "null"
 
-;; catchall for keywords, leaves some out (based on nagaqueen.leg)
-KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
-  | COVER_KW | ENUM_KW | FROM_KW | ABSTRACT_KW | FINAL_KW
-  | STATIC_KW | INLINE_KW | EXTENDS_KW | EXTERN_KW | UNMANGLED_KW
-  | IMPORT_KW | INCLUDE_KW | IF_KW | ELSE_KW | FOR_KW
-  | WHILE_KW | AS_KW | OPERATOR_KW | CONST_KW | NULL_KW | MATCH_KW | CASE_KW
-  ;
+
 
 ;; Simple tokens
 
@@ -210,7 +204,8 @@ goal
 statement
   : import
   | tuple
-  | expression
+  | ternary
+ ;;  | expression
   | KW
   ;
 
@@ -229,6 +224,7 @@ import_list
   | import_list COMMA import_atom
   ;
 
+;; tag only the file part without tagging the 'into' portion.
 import_atom
   : import_atom_part
   | import_atom_part INTO_KW identifier
@@ -274,6 +270,10 @@ tuple
 tuple_item
   : OPEN_PAREN expression CLOSE_PAREN
     (CODE-TAG $2 nil nil nil :tuple t)
+  ;
+
+ternary
+  : expression QUESTION expression COLON expression
   ;
 
 expression
@@ -360,6 +360,14 @@ DOTS
 BOOLEAN_LITERAL
   : TRUE_KW
   | FALSE_KW;
+
+;; catchall for keywords, leaves some out (based on nagaqueen.leg)
+KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
+  | COVER_KW | ENUM_KW | FROM_KW | ABSTRACT_KW | FINAL_KW
+  | STATIC_KW | INLINE_KW | EXTENDS_KW | EXTERN_KW | UNMANGLED_KW
+  | IMPORT_KW | INCLUDE_KW | IF_KW | ELSE_KW | FOR_KW
+  | WHILE_KW | AS_KW | OPERATOR_KW | CONST_KW | NULL_KW | MATCH_KW | CASE_KW
+  ;
 
 %%
 
