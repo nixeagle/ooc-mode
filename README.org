@@ -1,4 +1,5 @@
-Emacs major mode for ooc-lang.
+Emacs major mode for ooc-lang, tested support for *emacs 23.2* and
+up. Support for lower versions is untested!
 
 * Quick setup
   Into a directory of your choice do...
