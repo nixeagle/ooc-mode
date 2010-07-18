@@ -133,6 +133,7 @@
 %token <punctuation> PERCENT       "%"
 %token <punctuation> STAR          "*"
 %token <punctuation> SLASH         "/"
+%token <punctuation> SEMICOLON ";"
 
 %type <whitespace>      syntax "\\([\s]+\\)"
 %type <newline>      syntax "\\(\n\\|\s>\\)"
@@ -330,6 +331,11 @@ alphanumeric_dot
 comma_list
   : expression
   | comma_list COMMA expression
+  ;
+
+semicolon_optional
+  : ;;EMPTY
+  | SEMICOLON
   ;
 
 ;; ['.'] regex: \.?
