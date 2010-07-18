@@ -99,7 +99,7 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token ASS_MUL       "*"
 %token <punctuation> OOCDOC_SINGLE_LINE_START "///"
 %token <punctuation> COMMENT_SINGLE_LINE_START "//"
-%token <punctuation> ASS_DIV       "/"
+;;%token <punctuation> ASS_DIV       "/"
 %token ASS_B_RSHIFT  ">>"
 %token ASS_B_LSHIFT  "<<"
 %token ASS_B_XOR     "^"
@@ -130,16 +130,14 @@ KW: BREAK_KW | CONTINUE_KW | RETURN_KW | FUNC_KW
 %token B_LSHIFT      "<<"
 %token B_RSHIFT      ">>"
 
-%token DOUBLE_DOT    ".."
-
 %token L_NOT         "!"
 %token B_NOT         "~"
-%token PLUS          "+"
-%token MINUS         "-"
+%token <punctuation> PLUS          "+"
+%token <punctuation> MINUS         "-"
 
-%token PERCENT       "%"
-%token STAR          "*"
-;;%token SLASH         "/" ![/*]
+%token <punctuation> PERCENT       "%"
+%token <punctuation> STAR          "*"
+%token <punctuation> SLASH         "/"
 
 %type <whitespace>      syntax "\\([\s]+\\)"
 %type <newline>      syntax "\\(\n\\|\s>\\)"
@@ -248,7 +246,7 @@ import_atom_part
 
 import_path
   : alphanumeric_dot
-  | import_path ASS_DIV alphanumeric_dot
+  | import_path SLASH alphanumeric_dot
     (concat $1 $2 $3)
   ;
 
@@ -357,7 +355,7 @@ DOTS
  ;;  | SPACES
  ;;  | EOL
  ;;  | comment
-;
+;;;
 
 BOOLEAN_LITERAL
   : TRUE_KW

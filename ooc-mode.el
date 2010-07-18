@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 145
+;;     Update #: 146
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -494,9 +494,9 @@ default location of the rock sdk."
 
 (defun nix.lex-test ()
   (interactive)
-  (with-current-buffer "*wisent-log*"
+  (with-current-buffer (get-buffer-create "*wisent-log*")
     (erase-buffer))
-  (with-current-buffer "*Messages*"
+  (with-current-buffer (get-buffer-create "*Messages*")
     (erase-buffer))
   (with-current-buffer "ooc-wisent.wy"
     (semantic-grammar-create-package))
@@ -510,7 +510,7 @@ default location of the rock sdk."
  ;;   (ooc-mode)
                                         ;(insert .string)
     (let ((.lex (semantic-lex 0 (buffer-end 1) 1)))
-      (with-current-buffer "*Lexer Output*"
+      (with-current-buffer (get-buffer-create "*Lexer Output*")
         (erase-buffer)
         (insert (format "%S" .lex))))
     (bovinate 1)
