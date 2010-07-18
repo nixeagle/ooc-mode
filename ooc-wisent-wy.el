@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-18 23:07:28+0000
+;; Created: 2010-07-18 23:29:54+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -191,6 +191,7 @@
         ((import))
         ((tuple))
         ((ternary))
+        ((bracketed_block))
         ((KW)))
        (import
         ((IMPORT_KW import_list)
@@ -235,6 +236,24 @@
         ((value_core)
          (wisent-raw-tag
           (semantic-tag-new-code $1 nil nil))))
+       (bracketed_block
+        ((BRACKET_BLOCK)
+         (progn
+           (print "BRACKET!")
+           (semantic-parse-region
+            (car $region1)
+            (cdr $region1)
+            'bracketed_block_body 1))))
+       (bracketed_block_body
+        ((OPEN_BRACKET)
+         nil)
+        ((CLOSE_BRACKET)
+         nil)
+        ((expression)
+         (progn
+           (print expression)
+           (wisent-raw-tag
+            (semantic-tag-new-code $1 nil nil)))))
        (value_core
         ((number_literal))
         ((STRING_LITERAL))
@@ -258,6 +277,9 @@
          (concat $1 $2 $3))
         ((alphanumeric_dot ALPHANUMERIC dots_rest)
          (concat $1 $2 $3)))
+       (comma_list
+        ((expression))
+        ((comma_list COMMA expression)))
        (dot_optional
         (nil)
         ((DOT)))
@@ -305,7 +327,7 @@
         ((NULL_KW))
         ((MATCH_KW))
         ((CASE_KW))))
-     '(goal tuple_item array_literal_item)))
+     '(goal tuple_item array_literal_item bracketed_block_body)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()

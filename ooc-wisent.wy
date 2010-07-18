@@ -4,6 +4,7 @@
 %start goal
 %start tuple_item
 %start array_literal_item
+%start bracketed_block_body
 
 ;; keywords
 %type <keyword>
@@ -205,6 +206,7 @@ statement
   : import
   | tuple
   | ternary
+  | bracketed_block
  ;;  | expression
   | KW
   ;
@@ -235,22 +237,12 @@ import_atom_part
     (INCLUDE-TAG $1 nil :file $1)
   ;
 
-;; [A-Za-z_0-9]+
- ;;import_name
-;;  : ALPHANUMERIC
-;;  ;
-
 import_path
   : alphanumeric_dot
   | import_path SLASH alphanumeric_dot
     (concat $1 $2 $3)
   ;
 
-;; [A-Za-z_0-9.]+
- ;;import_path_part
-;;: ALPHANUMERIC
-;;  : alphanumeric_dot
-;;;
 
 array_literal
   : SQUARE_BLOCK
@@ -279,6 +271,21 @@ ternary
 expression
   : value_core
     (CODE-TAG $1 nil nil)
+  ;
+
+bracketed_block
+  : BRACKET_BLOCK
+    (progn (print "BRACKET!")
+           (EXPANDFULL $1 bracketed_block_body))
+  ;
+
+bracketed_block_body
+  : OPEN_BRACKET
+    ()
+  |  CLOSE_BRACKET
+    ()
+  | expression
+    (progn (print expression) (CODE-TAG $1 nil nil))
   ;
 
 value_core
@@ -318,6 +325,12 @@ alphanumeric_dot
     (concat $1 $2 $3)
   | alphanumeric_dot ALPHANUMERIC dots_rest
     (concat $1 $2 $3)
+  ;
+
+;; expression (',' expression)*
+comma_list
+  : expression
+  | comma_list COMMA expression
   ;
 
 ;; ['.'] regex: \.?
