@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 151
+;;     Update #: 152
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -536,10 +536,10 @@ default location of the rock sdk."
       (o 'flymake-ooc-rock-command-line-options
          "DEPRECIATED, use `ooc-rock-dist' or `ooc-rock-binary'!")
       (insert "\n\n== ooc-projects==\n\n"
-              ooc-projects)))
+              (format "%s" ooc-projects))))
   (pop-to-buffer "*ooc-important-config-options*" nil t))
 
-(defun nix.lex-test ()
+(defun* nix.lex-test (&optional (buffer (current-buffer)))
   (interactive)
   (with-current-buffer (get-buffer-create "*wisent-log*")
     (erase-buffer))
@@ -547,7 +547,7 @@ default location of the rock sdk."
     (erase-buffer))
   (with-current-buffer "ooc-wisent.wy"
     (semantic-grammar-create-package))
-  (with-current-buffer "lex-test.ooc"
+  (with-current-buffer buffer
     (setq semantic-lex-syntax-table ooc-mode-syntax-table)
     (ooc-wisent-wy--install-parser)
     (set (make-local-variable 'wisent-discarding-token-functions)
@@ -564,7 +564,7 @@ default location of the rock sdk."
 
 
     )
-  (switch-to-buffer "lex-test.ooc" t)
+  (switch-to-buffer buffer t)
   (other-window 1)
   (switch-to-buffer "*Parser Output*" t)
   (other-window -1))
