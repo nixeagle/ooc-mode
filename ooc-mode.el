@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 146
+;;     Update #: 147
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -44,6 +44,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Code:
+(when (and (< emacs-major-version 23)
+           (< emacs-minor-version 2))
+  (error "ooc mode requires GNU Emacs version 23.2 or later."))
+
 (require 'cc-mode)
 (eval-when-compile
   (require 'cc-langs)
