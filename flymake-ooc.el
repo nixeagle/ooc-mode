@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 33
+;;     Update #: 34
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -119,6 +119,13 @@
   (setq flymake-ooc-default-directory nil))
 (ad-activate 'flymake-get-full-patched-file-name)
 
+(defun flymake-ooc-mode-debug ()
+  "Debug flymake by setting loglevel to 3."
+  (interactive)
+  (setq flymake-log-level 3)
+  (flymake-ooc-mode)
+  (pop-to-buffer "*Messages*" t t))
+
 (defun flymake-ooc-init ()
   (append (list (ooc-rock-binary)
                 (append
@@ -153,6 +160,7 @@
 ;;;###autoload
 (defun flymake-ooc-mode ()
   (interactive)
+  (setq flymake-log-level -1)
   (flymake-mode))
 
 (provide 'flymake-ooc)
