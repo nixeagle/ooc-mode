@@ -209,11 +209,18 @@ import_statement
     (EXPANDFULL $2 import_atom)
   ;
 
-import_statement_list
+import_statement_items
   : import_path
-  | import_statement_list COMMA import_path
-    (concat $1 $2 $3)
+  | import_path INTO_KW identifier
+    (concat $1 " " $2 " " $3)
   ;
+
+import_statement_list
+  : import_statement_items
+  | import_statement_list COMMA import_statement_items
+    (print (concat $1 $2 $3))
+  ;
+
 statements
   : ;; emty
   | statement statements
@@ -258,6 +265,8 @@ import_list
 ;; tag only the file part without tagging the 'into' portion.
 import_atom
   : import_atom_part INTO_KW identifier
+    (progn ;;(print (concat "IMPORTAT " $1 " " $2 " " $3))
+           (identity $1))
   | import_atom_part
   ;
 

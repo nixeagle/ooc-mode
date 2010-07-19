@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-19 01:29:11+0000
+;; Created: 2010-07-19 02:17:53+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -194,10 +194,15 @@
           (car $region2)
           (cdr $region2)
           'import_atom 1)))
-       (import_statement_list
+       (import_statement_items
         ((import_path))
-        ((import_statement_list COMMA import_path)
-         (concat $1 $2 $3)))
+        ((import_path INTO_KW identifier)
+         (concat $1 " " $2 " " $3)))
+       (import_statement_list
+        ((import_statement_items))
+        ((import_statement_list COMMA import_statement_items)
+         (print
+          (concat $1 $2 $3))))
        (statements
         (nil)
         ((statement statements)
@@ -231,7 +236,9 @@
         ((import_atom))
         ((import_list COMMA import_atom)))
        (import_atom
-        ((import_atom_part INTO_KW identifier))
+        ((import_atom_part INTO_KW identifier)
+         (progn
+           (identity $1)))
         ((import_atom_part)))
        (import_atom_part
         ((import_path)
