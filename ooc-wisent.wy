@@ -216,11 +216,11 @@ import_statement
 import_statement_items
   : import_path
   | import_path import_statement_block
-    (progn (print (list $1 $2)) (concat $1 $2))
+    (progn  (concat $1 $2))
   | import_path INTO_KW identifier
-    (print (concat $1 " " $2 " " $3))
+    (concat $1 " " $2 " " $3)
   | import_path import_statement_block INTO_KW identifier
-    (print (concat $1 $2 " " $3 " " $4))
+    (concat $1 $2 " " $3 " " $4)
   ;
 
 import_statement_block
@@ -229,7 +229,7 @@ import_statement_block
 import_statement_list
   : import_statement_items
   | import_statement_list COMMA import_statement_items
-    (print (concat $1 $2 $3))
+    (concat $1 $2 $3)
   ;
 
 statements
@@ -277,7 +277,7 @@ import_path_list
   : import_atom_part
     (cons $1 nil)
   | import_path_list COMMA import_atom_part
-    (print (if $2 (cons $3 $1) (error "import_path_list failed :S")))
+    (if $2 (cons $3 $1) (error "import_path_list failed :S"))
   ;
 ;; tag only the file part without tagging the 'into' portion.
 import_atom
