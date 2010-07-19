@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 148
+;;     Update #: 149
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -514,6 +514,30 @@ default location of the rock sdk."
                                   paths))
           return (expand-file-name (concat (semantic-tag-include-filename tag) ".ooc")
                                   paths))))
+
+(defun ooc-format-configuration-option-output (option &optional notes)
+  (if notes
+      (insert (format "%-25s= %s\n    %s\n" option (pprint (symbol-value option))
+                      notes))
+    (insert (format "%-25s= %s\n" option (pprint (symbol-value option))))))
+
+(defun ooc-print-configuration-options ()
+  "Print out interesting `ooc-mode' options for bug reports."
+  (interactive)
+  (with-current-buffer (get-buffer-create "*ooc-important-config-options*")
+    (erase-buffer)
+    (flet ((o (option &optional notes)
+              (ooc-format-configuration-option-output option notes)))
+      (o 'ooc-rock-dist)
+      (o 'ooc-rock-sdk)
+      (o 'ooc-rock-binary
+         (format "If rock is at %s/bin/rock please leave this nil."
+                 ooc-rock-dist))
+      (o 'flymake-ooc-rock-command-line-options
+         "DEPRECIATED, use `ooc-rock-dist' or `ooc-rock-binary'!")
+      (insert "\n\n== ooc-projects==\n\n"
+              (pprint ooc-projects))))
+  (pop-to-buffer "*ooc-important-config-options*" nil t))
 
 (defun nix.lex-test ()
   (interactive)
