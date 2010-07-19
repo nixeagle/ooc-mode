@@ -8,7 +8,7 @@
 ;; Version: 1.0
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 34
+;;     Update #: 35
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -115,8 +115,8 @@
   (around flymake-get-full-patched-file-name-around)
   "Also add `flymake-ooc-default-directory' to help out."
   (ad-set-arg 1 (cons flymake-ooc-default-directory (ad-get-arg 1)))
-  ad-do-it
-  (setq flymake-ooc-default-directory nil))
+  (prog1 ad-do-it
+    (setq flymake-ooc-default-directory nil)))
 (ad-activate 'flymake-get-full-patched-file-name)
 
 (defun flymake-ooc-mode-debug ()
