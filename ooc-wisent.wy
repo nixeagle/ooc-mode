@@ -274,26 +274,30 @@ import_list
   ;
 
 import_path_list
-  : import_path
-  | import_path_list COMMA import_path
+  : import_atom_part
+    (cons $1 nil)
+  | import_path_list COMMA import_atom_part
+    (print (if $2 (cons $3 $1) (error "import_path_list failed :S")))
   ;
 ;; tag only the file part without tagging the 'into' portion.
 import_atom
-
-;; : import_atom_part
-;;  (print $1)
-;;  : import_atom_part INTO_KW identifier
-  : import_path import_atom_block
-    (progn (print (concat "import_path: " $1))
-           (mapcar (lambda (tag)
+  : import_atom_part
+  | import_atom_part import_atom_block
+    (apply 'nconc (nreverse
+                   (mapcar (lambda (tag)
+                             (semantic-tag-set-name tag (concat $1 (semantic-tag-name tag)))
+                             (EXPANDTAG tag))
+                           $2)))
+  | import_atom_part INTO_KW identifier
+  | import_path import_atom_block
+    (apply 'nconc (nreverse (mapcar (lambda (tag)
                      (semantic-tag-set-name tag (concat $1 (semantic-tag-name tag)))
-                     tag)
-                   $2))
-
+                     (EXPANDTAG tag))
+                             $2)))
   ;
 import_atom_block
   : OPEN_SQUARE import_path_list CLOSE_SQUARE
-    (progn (print $1) (EXPANDFULL $2 import_atom_part))
+    (identity $2)
   | OPEN_SQUARE CLOSE_SQUARE
     ();
 import_atom_part

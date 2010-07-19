@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-19 04:34:12+0000
+;; Created: 2010-07-19 06:02:41+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -248,29 +248,41 @@
         ((import_atom))
         ((import_list COMMA import_atom)))
        (import_path_list
-        ((import_path))
-        ((import_path_list COMMA import_path)))
+        ((import_atom_part)
+         (cons $1 nil))
+        ((import_path_list COMMA import_atom_part)
+         (print
+          (if $2
+              (cons $3 $1)
+            (error "import_path_list failed :S")))))
        (import_atom
+        ((import_atom_part))
+        ((import_atom_part import_atom_block)
+         (apply 'nconc
+                (nreverse
+                 (mapcar
+                  (lambda
+                    (tag)
+                    (semantic-tag-set-name tag
+                                           (concat $1
+                                                   (semantic-tag-name tag)))
+                    (wisent-cook-tag tag))
+                  $2))))
+        ((import_atom_part INTO_KW identifier))
         ((import_path import_atom_block)
-         (progn
-           (print
-            (concat "import_path: " $1))
-           (mapcar
-            (lambda
-              (tag)
-              (semantic-tag-set-name tag
-                                     (concat $1
-                                             (semantic-tag-name tag)))
-              tag)
-            $2))))
+         (apply 'nconc
+                (nreverse
+                 (mapcar
+                  (lambda
+                    (tag)
+                    (semantic-tag-set-name tag
+                                           (concat $1
+                                                   (semantic-tag-name tag)))
+                    (wisent-cook-tag tag))
+                  $2)))))
        (import_atom_block
         ((OPEN_SQUARE import_path_list CLOSE_SQUARE)
-         (progn
-           (print $1)
-           (semantic-parse-region
-            (car $region2)
-            (cdr $region2)
-            'import_atom_part 1)))
+         (identity $2))
         ((OPEN_SQUARE CLOSE_SQUARE)
          nil))
        (import_atom_part
