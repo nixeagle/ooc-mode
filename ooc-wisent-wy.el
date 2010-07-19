@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-19 02:17:53+0000
+;; Created: 2010-07-19 04:34:12+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -33,6 +33,7 @@
 
 ;;; Prologue
 ;;
+(defvar ooc-wisent-wy--current-import-path nil)
 
 ;;; Declarations
 ;;
@@ -196,8 +197,19 @@
           'import_atom 1)))
        (import_statement_items
         ((import_path))
+        ((import_path import_statement_block)
+         (progn
+           (print
+            (list $1 $2))
+           (concat $1 $2)))
         ((import_path INTO_KW identifier)
-         (concat $1 " " $2 " " $3)))
+         (print
+          (concat $1 " " $2 " " $3)))
+        ((import_path import_statement_block INTO_KW identifier)
+         (print
+          (concat $1 $2 " " $3 " " $4))))
+       (import_statement_block
+        ((SQUARE_BLOCK)))
        (import_statement_list
         ((import_statement_items))
         ((import_statement_list COMMA import_statement_items)
@@ -235,18 +247,40 @@
        (import_list
         ((import_atom))
         ((import_list COMMA import_atom)))
+       (import_path_list
+        ((import_path))
+        ((import_path_list COMMA import_path)))
        (import_atom
-        ((import_atom_part INTO_KW identifier)
+        ((import_path import_atom_block)
          (progn
-           (identity $1)))
-        ((import_atom_part)))
+           (print
+            (concat "import_path: " $1))
+           (mapcar
+            (lambda
+              (tag)
+              (semantic-tag-set-name tag
+                                     (concat $1
+                                             (semantic-tag-name tag)))
+              tag)
+            $2))))
+       (import_atom_block
+        ((OPEN_SQUARE import_path_list CLOSE_SQUARE)
+         (progn
+           (print $1)
+           (semantic-parse-region
+            (car $region2)
+            (cdr $region2)
+            'import_atom_part 1)))
+        ((OPEN_SQUARE CLOSE_SQUARE)
+         nil))
        (import_atom_part
         ((import_path)
          (wisent-raw-tag
           (semantic-tag-new-include $1 nil :file $1))))
        (import_path
-        ((alphanumeric_dot))
-        ((import_path SLASH alphanumeric_dot)
+        ((alphanumeric_dot slash_optional)
+         (concat $1 $2))
+        ((import_path alphanumeric_dot slash_optional)
          (concat $1 $2 $3)))
        (array_literal
         ((SQUARE_BLOCK)
@@ -314,9 +348,15 @@
        (comma_list
         ((expression))
         ((comma_list COMMA expression)))
+       (comma_optional
+        (nil)
+        ((COMMA)))
        (semicolon_optional
         (nil)
         ((SEMICOLON)))
+       (slash_optional
+        (nil)
+        ((SLASH)))
        (dot_optional
         (nil)
         ((DOT)))
@@ -364,7 +404,7 @@
         ((NULL_KW))
         ((MATCH_KW))
         ((CASE_KW))))
-     '(goal tuple_item array_literal_item bracketed_block_body import_atom)))
+     '(goal tuple_item array_literal_item bracketed_block_body import_atom import_atom_part)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()
