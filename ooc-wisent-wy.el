@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-19 06:02:41+0000
+;; Created: 2010-07-19 06:35:44+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -196,25 +196,22 @@
           (cdr $region2)
           'import_atom 1)))
        (import_statement_items
+        ((DOUBLE_DOT SLASH)
+         (concat $1 $2))
         ((import_path))
         ((import_path import_statement_block)
          (progn
-           (print
-            (list $1 $2))
            (concat $1 $2)))
         ((import_path INTO_KW identifier)
-         (print
-          (concat $1 " " $2 " " $3)))
+         (concat $1 " " $2 " " $3))
         ((import_path import_statement_block INTO_KW identifier)
-         (print
-          (concat $1 $2 " " $3 " " $4))))
+         (concat $1 $2 " " $3 " " $4)))
        (import_statement_block
         ((SQUARE_BLOCK)))
        (import_statement_list
         ((import_statement_items))
         ((import_statement_list COMMA import_statement_items)
-         (print
-          (concat $1 $2 $3))))
+         (concat $1 $2 $3)))
        (statements
         (nil)
         ((statement statements)
@@ -251,10 +248,9 @@
         ((import_atom_part)
          (cons $1 nil))
         ((import_path_list COMMA import_atom_part)
-         (print
-          (if $2
-              (cons $3 $1)
-            (error "import_path_list failed :S")))))
+         (if $2
+             (cons $3 $1)
+           (error "import_path_list failed :S"))))
        (import_atom
         ((import_atom_part))
         ((import_atom_part import_atom_block)

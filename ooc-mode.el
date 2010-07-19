@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 147
+;;     Update #: 148
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -486,6 +486,19 @@ default location of the rock sdk."
   (or project-path ooc-rock-sdk
       (expand-file-name "sdk" ooc-rock-dist)))
 
+(defun ooc-project-find-sourcepaths (project)
+  (if project
+      (destructuring-bind (name path command-opts &rest remaining) project
+
+        (or (cons default-directory
+                  (mapcan (lambda (option)
+                            (if (search "-sourcepath=" option)
+                                (list (expand-file-name (substring option (length "-sourcepath="))
+                                                        path))))
+                          command-opts))
+            (list default-directory)))
+    (list default-directory)))
+
 ;; Semantic overloads
 (define-mode-local-override semantic-dependency-tag-file
   ooc-mode (&optional tag)
@@ -493,8 +506,14 @@ default location of the rock sdk."
   (let ((tag (or tag (car (semantic-find-tag-by-overlay nil)))))
     (unless (semantic-tag-of-class-p tag 'include)
       (signal 'wrong-type-argument (list tag 'include)))
-    (expand-file-name (concat (semantic-tag-include-filename tag) ".ooc")
-                      (ooc-rock-sdk-path))))
+    (loop for paths in (append (list (ooc-rock-sdk-path))
+                               (ooc-project-find-sourcepaths
+                                (ooc-find-root-project)))
+          when (file-exists-p
+                (expand-file-name (concat (semantic-tag-include-filename tag) ".ooc")
+                                  paths))
+          return (expand-file-name (concat (semantic-tag-include-filename tag) ".ooc")
+                                  paths))))
 
 (defun nix.lex-test ()
   (interactive)
