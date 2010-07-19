@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 150
+;;     Update #: 151
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -49,7 +49,6 @@
   (error "ooc mode requires GNU Emacs version 23.2 or later."))
 
 (require 'cc-mode)
-(require 'pprint)
 (eval-when-compile
   (require 'cc-langs)
   (require 'cc-fonts)
@@ -518,9 +517,9 @@ default location of the rock sdk."
 
 (defun ooc-format-configuration-option-output (option &optional notes)
   (if notes
-      (insert (format "%-25s= %s\n    %s\n" option (pprint (symbol-value option))
+      (insert (format "%-25s= %s\n    %s\n" option (symbol-value option)
                       notes))
-    (insert (format "%-25s= %s\n" option (pprint (symbol-value option))))))
+    (insert (format "%-25s= %s\n" option (symbol-value option)))))
 
 (defun ooc-print-configuration-options ()
   "Print out interesting `ooc-mode' options for bug reports."
@@ -537,7 +536,7 @@ default location of the rock sdk."
       (o 'flymake-ooc-rock-command-line-options
          "DEPRECIATED, use `ooc-rock-dist' or `ooc-rock-binary'!")
       (insert "\n\n== ooc-projects==\n\n"
-              (pprint ooc-projects))))
+              ooc-projects)))
   (pop-to-buffer "*ooc-important-config-options*" nil t))
 
 (defun nix.lex-test ()
