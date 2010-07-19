@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-18 23:40:05+0000
+;; Created: 2010-07-19 01:29:11+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -187,22 +187,52 @@
      '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT COLON ASS_DECL ASS ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION LOGIC_OR LOGIC_AND BINARY_OR BINARY_XOR BINARY_AND EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH SEMICOLON PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
        nil
        (goal
-        ((statement)))
+        ((import_statement)))
+       (import_statement
+        ((IMPORT_KW import_statement_list)
+         (semantic-parse-region
+          (car $region2)
+          (cdr $region2)
+          'import_atom 1)))
+       (import_statement_list
+        ((import_path))
+        ((import_statement_list COMMA import_path)
+         (concat $1 $2 $3)))
+       (statements
+        (nil)
+        ((statement statements)
+         (if $2
+             (append $2
+                     (if $1
+                         (wisent-cook-tag $1)
+                       (wisent-cook-tag
+                        (wisent-raw-tag
+                         (semantic-tag "NOTAG" 'notag $1 nil)))))
+           (if $1
+               (wisent-cook-tag $1)
+             (wisent-cook-tag
+              (wisent-raw-tag
+               (semantic-tag "NOTAG" 'notag $1 nil)))))))
+       (statement_line
+        ((statement)
+         (wisent-raw-tag
+          (semantic-tag "STATEMENT_LINE" 'nonterminal :children $1))))
        (statement
         ((import))
         ((tuple))
         ((ternary))
         ((bracketed_block))
+        ((expression))
         ((KW)))
        (import
         ((IMPORT_KW import_list)
-         (identity $2)))
+         (wisent-cook-tag $2)))
        (import_list
         ((import_atom))
         ((import_list COMMA import_atom)))
        (import_atom
-        ((import_atom_part))
-        ((import_atom_part INTO_KW identifier)))
+        ((import_atom_part INTO_KW identifier))
+        ((import_atom_part)))
        (import_atom_part
         ((import_path)
          (wisent-raw-tag
@@ -238,7 +268,6 @@
        (bracketed_block
         ((BRACKET_BLOCK)
          (progn
-           (print "BRACKET!")
            (semantic-parse-region
             (car $region1)
             (cdr $region1)
@@ -250,7 +279,6 @@
          nil)
         ((expression)
          (progn
-           (print $1)
            (wisent-raw-tag
             (semantic-tag-new-code $1 nil nil)))))
        (value_core
@@ -329,7 +357,7 @@
         ((NULL_KW))
         ((MATCH_KW))
         ((CASE_KW))))
-     '(goal tuple_item array_literal_item bracketed_block_body)))
+     '(goal tuple_item array_literal_item bracketed_block_body import_atom)))
   "Parser table.")
 
 (defun ooc-wisent-wy--install-parser ()

@@ -5,6 +5,7 @@
 %start tuple_item
 %start array_literal_item
 %start bracketed_block_body
+%start import_atom
 
 ;; keywords
 %type <keyword>
@@ -198,9 +199,36 @@
 %%
 
 goal
-  : statement
+  : import_statement
  ;;  | alphanumeric_dot
  ;; (TAG "TOPLEVEL" 'top! :thing $1)
+  ;
+
+import_statement
+  : IMPORT_KW import_statement_list
+    (EXPANDFULL $2 import_atom)
+  ;
+
+import_statement_list
+  : import_path
+  | import_statement_list COMMA import_path
+    (concat $1 $2 $3)
+  ;
+statements
+  : ;; emty
+  | statement statements
+    (if $2 (append $2
+                   (if $1
+                       (EXPANDTAG $1)
+                     (EXPANDTAG (TAG "NOTAG" 'notag $1 nil))))
+      (if $1
+                       (EXPANDTAG $1)
+        (EXPANDTAG (TAG "NOTAG" 'notag $1 nil))))
+  ;
+
+statement_line
+  : statement
+    (TAG "STATEMENT_LINE" 'nonterminal :children $1)
   ;
 
 statement
@@ -208,7 +236,7 @@ statement
   | tuple
   | ternary
   | bracketed_block
- ;;  | expression
+  | expression
   | KW
   ;
 
@@ -219,7 +247,7 @@ statement
 ;; This only works for the simplest possible cases right now
 import
   : IMPORT_KW import_list
-    (identity $2)
+    (EXPANDTAG $2)
   ;
 
 import_list
@@ -229,8 +257,8 @@ import_list
 
 ;; tag only the file part without tagging the 'into' portion.
 import_atom
-  : import_atom_part
-  | import_atom_part INTO_KW identifier
+  : import_atom_part INTO_KW identifier
+  | import_atom_part
   ;
 
 import_atom_part
@@ -275,7 +303,7 @@ expression
 
 bracketed_block
   : BRACKET_BLOCK
-    (progn (print "BRACKET!")
+    (progn
            (EXPANDFULL $1 bracketed_block_body))
   ;
 
@@ -284,8 +312,10 @@ bracketed_block_body
     ()
   |  CLOSE_BRACKET
     ()
+ ;;  |  expression bracketed_block_body
+ ;;    (identity $1)
   | expression
-    (progn (print $1) (CODE-TAG $1 nil nil))
+    (progn  (CODE-TAG $1 nil nil))
   ;
 
 value_core
