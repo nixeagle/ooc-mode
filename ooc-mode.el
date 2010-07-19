@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 149
+;;     Update #: 150
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -49,6 +49,7 @@
   (error "ooc mode requires GNU Emacs version 23.2 or later."))
 
 (require 'cc-mode)
+(require 'pprint)
 (eval-when-compile
   (require 'cc-langs)
   (require 'cc-fonts)
