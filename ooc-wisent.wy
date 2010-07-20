@@ -161,6 +161,8 @@
 %token <open-paren> OPEN_BRACKET    "{"
 %token <close-paren> CLOSE_BRACKET    "}"
 
+%type <comment>
+%token <comment> comment
 
 ;;;; Numbers
 ;; Decimal number, base 10, like 102_123 or -23
