@@ -229,11 +229,15 @@ import_statement_items
 import_statement_block
   : SQUARE_BLOCK
   ;
+
+-: ;;EMPTY
+  | SPACES;
+
 import_statement_list
   : import_statement_items
     (D $1)
-  | import_statement_list COMMA import_statement_items
-    (D $1 $2 $3)
+  | import_statement_list COMMA - import_statement_items
+    (D $1 $2 $4)
   ;
 
 statements
@@ -265,7 +269,7 @@ statement
 import_list
   : import_atom
     (D $1)
-  | import_list COMMA import_atom
+  | import_list COMMA - import_atom
     (D $1)
  ;;    (print (list "import_list:1" $1 $2 $3))
   ;
@@ -273,8 +277,8 @@ import_list
 import_path_list
   : import_atom_part
     (cons $1 nil)
-  | import_path_list COMMA import_atom_part
-    (if $2 (cons $3 $1) (error "import_path_list failed :S"))
+  | import_path_list COMMA - import_atom_part
+    (if $2 (cons $4 $1) (error "import_path_list failed :S"))
   ;
 ;; tag only the file part without tagging the 'into' portion.
 import_atom

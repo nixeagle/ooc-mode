@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-20 00:17:39+0000
+;; Created: 2010-07-20 00:41:30+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -243,6 +243,9 @@
            (concat $1 $2 " " $3 " " $4))))
        (import_statement_block
         ((SQUARE_BLOCK)))
+       (-
+        (nil)
+        ((SPACES)))
        (import_statement_list
         ((import_statement_items)
          (progn
@@ -252,14 +255,14 @@
                       (list $1)
                       wisent-loop wisent-input)))
            (concat $1)))
-        ((import_statement_list COMMA import_statement_items)
+        ((import_statement_list COMMA - import_statement_items)
          (progn
            (when ooc-grammar-macros-debug-mode
              (princ
               (format "%-50S [`%s']\n   next: %S\n"
-                      (list $1 $2 $3)
+                      (list $1 $2 $4)
                       wisent-loop wisent-input)))
-           (concat $1 $2 $3))))
+           (concat $1 $2 $4))))
        (statements
         (nil)
         ((statement statements)
@@ -295,7 +298,7 @@
                       (list $1)
                       wisent-loop wisent-input)))
            (concat $1)))
-        ((import_list COMMA import_atom)
+        ((import_list COMMA - import_atom)
          (progn
            (when ooc-grammar-macros-debug-mode
              (princ
@@ -306,9 +309,9 @@
        (import_path_list
         ((import_atom_part)
          (cons $1 nil))
-        ((import_path_list COMMA import_atom_part)
+        ((import_path_list COMMA - import_atom_part)
          (if $2
-             (cons $3 $1)
+             (cons $4 $1)
            (error "import_path_list failed :S"))))
        (import_atom
         ((import_atom_part))
