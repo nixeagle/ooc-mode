@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-20 00:41:30+0000
+;; Created: 2010-07-20 00:44:44+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -588,8 +588,8 @@ they are comment end characters)."
   semantic-lex-punctuation-type
   ooc-wisent-wy--<whitespace>-regexp-analyzer
   ;;  semantic-lex-ignore-whitespace
-  semantic-lex-newline-as-whitespace
-  semantic-lex-ignore-newline
+  ;;  semantic-lex-newline-as-whitespace
+  ;;  semantic-lex-ignore-newline
   semantic-lex-comments
 
   semantic-lex-ignore-all

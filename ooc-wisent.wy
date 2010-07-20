@@ -497,8 +497,8 @@ they are comment end characters)."
   semantic-lex-punctuation-type
   ooc-wisent-wy--<whitespace>-regexp-analyzer
   ;;  semantic-lex-ignore-whitespace
-  semantic-lex-newline-as-whitespace
-  semantic-lex-ignore-newline
+  ;;  semantic-lex-newline-as-whitespace
+  ;;  semantic-lex-ignore-newline
   semantic-lex-comments
 
   semantic-lex-ignore-all
