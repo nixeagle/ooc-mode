@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-19 06:35:44+0000
+;; Created: 2010-07-20 00:17:39+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -102,7 +102,11 @@
 
 (defconst ooc-wisent-wy--token-table
   (semantic-lex-make-type-table
-   '(("symbol"
+   '(("newline"
+      (EOL))
+     ("whitespace"
+      (SPACES))
+     ("symbol"
       (IDENTIFIER)
       (ALPHANUMERIC . "[A-Za-z_0-9]+"))
      ("string"
@@ -166,14 +170,15 @@
       (DOT . ".")
       (DOUBLE_DOT . "..")
       (COMMA . ",")))
-   '(("symbol" :declared t)
+   '(("newline" :declared t)
+     ("symbol" :declared t)
      ("string" :declared t)
      ("block" :declared t)
      ("number" syntax "-?\\(0c[0-8][0-8_]*\\|0b[01][01_]*\\|0x[0-9a-fA-F][0-9a-fA-F_]*\\|[0-9_]+\\.[0-9_]*\\|[0-9][0-9_]*\\)")
      ("number" :declared t)
      ("newline" syntax "\\(\n\\| >\\)")
      ("newline" :declared t)
-     ("whitespace" syntax "\\([ ]+\\)")
+     ("whitespace" syntax "\\([ \n]+\\)")
      ("whitespace" :declared t)
      ("keyword" :declared t)))
   "Table of lexical tokens.")
@@ -185,33 +190,76 @@
        (require 'wisent-comp nil t)
        (require 'semantic/wisent/comp nil t)))
     (wisent-compile-grammar
-     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT COLON ASS_DECL ASS ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION LOGIC_OR LOGIC_AND BINARY_OR BINARY_XOR BINARY_AND EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH SEMICOLON PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER)
+     '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT COLON ASS_DECL ASS ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION LOGIC_OR LOGIC_AND BINARY_OR BINARY_XOR BINARY_AND EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH SEMICOLON PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER SPACES EOL)
        nil
        (goal
         ((import_statement)))
        (import_statement
-        ((IMPORT_KW import_statement_list)
-         (semantic-parse-region
-          (car $region2)
-          (cdr $region2)
-          'import_atom 1)))
+        ((IMPORT_KW SPACES import_statement_list)
+         (progn
+           (progn
+             (when ooc-grammar-macros-debug-mode
+               (princ
+                (format "%-50S [`%s']\n   next: %S\n"
+                        (list $1 $2 $3)
+                        wisent-loop wisent-input)))
+             (concat $1 $2 $3))
+           (semantic-parse-region
+            (car $region3)
+            (cdr $region3)
+            'import_atom 1))))
        (import_statement_items
-        ((DOUBLE_DOT SLASH)
-         (concat $1 $2))
-        ((import_path))
+        ((import_path)
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1)
+                      wisent-loop wisent-input)))
+           (concat $1)))
         ((import_path import_statement_block)
          (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 $2)
+                      wisent-loop wisent-input)))
            (concat $1 $2)))
         ((import_path INTO_KW identifier)
-         (concat $1 " " $2 " " $3))
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 " " $2 " " $3)
+                      wisent-loop wisent-input)))
+           (concat $1 " " $2 " " $3)))
         ((import_path import_statement_block INTO_KW identifier)
-         (concat $1 $2 " " $3 " " $4)))
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 $2 " " $3 " " $4)
+                      wisent-loop wisent-input)))
+           (concat $1 $2 " " $3 " " $4))))
        (import_statement_block
         ((SQUARE_BLOCK)))
        (import_statement_list
-        ((import_statement_items))
+        ((import_statement_items)
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1)
+                      wisent-loop wisent-input)))
+           (concat $1)))
         ((import_statement_list COMMA import_statement_items)
-         (concat $1 $2 $3)))
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 $2 $3)
+                      wisent-loop wisent-input)))
+           (concat $1 $2 $3))))
        (statements
         (nil)
         ((statement statements)
@@ -232,18 +280,29 @@
          (wisent-raw-tag
           (semantic-tag "STATEMENT_LINE" 'nonterminal :children $1))))
        (statement
-        ((import))
+        ((import_statement))
         ((tuple))
         ((ternary))
         ((bracketed_block))
         ((expression))
         ((KW)))
-       (import
-        ((IMPORT_KW import_list)
-         (wisent-cook-tag $2)))
        (import_list
-        ((import_atom))
-        ((import_list COMMA import_atom)))
+        ((import_atom)
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1)
+                      wisent-loop wisent-input)))
+           (concat $1)))
+        ((import_list COMMA import_atom)
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1)
+                      wisent-loop wisent-input)))
+           (concat $1))))
        (import_path_list
         ((import_atom_part)
          (cons $1 nil))
@@ -287,9 +346,21 @@
           (semantic-tag-new-include $1 nil :file $1))))
        (import_path
         ((alphanumeric_dot slash_optional)
-         (concat $1 $2))
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 $2)
+                      wisent-loop wisent-input)))
+           (concat $1 $2)))
         ((import_path alphanumeric_dot slash_optional)
-         (concat $1 $2 $3)))
+         (progn
+           (when ooc-grammar-macros-debug-mode
+             (princ
+              (format "%-50S [`%s']\n   next: %S\n"
+                      (list $1 $2 $3)
+                      wisent-loop wisent-input)))
+           (concat $1 $2 $3))))
        (array_literal
         ((SQUARE_BLOCK)
          (semantic-bovinate-from-nonterminal
@@ -349,6 +420,7 @@
         ((ALPHANUMERIC))
         ((IDENTIFIER)))
        (alphanumeric_dot
+        ((DOTS))
         ((dots_rest ALPHANUMERIC dots_rest)
          (concat $1 $2 $3))
         ((alphanumeric_dot ALPHANUMERIC dots_rest)
@@ -452,9 +524,9 @@
 
 (define-lex-regex-type-analyzer ooc-wisent-wy--<whitespace>-regexp-analyzer
   "regexp analyzer for <whitespace> tokens."
-  "\\([ ]+\\)"
+  "\\([ \n]+\\)"
   nil
-  'whitespace)
+  'SPACES)
 
 (define-lex-sexp-type-analyzer ooc-wisent-wy--<string>-sexp-analyzer
   "sexp analyzer for <string> tokens."
@@ -481,7 +553,7 @@
   "regexp analyzer for <newline> tokens."
   "\\(\n\\| >\\)"
   nil
-  'newline)
+  'EOL)
 
 
 ;;; Epilogue
@@ -498,22 +570,24 @@ they are comment end characters)."
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
-  semantic-lex-ignore-comments
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-whitespace
   ooc-wisent-wy--<number>-regexp-analyzer
+  ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
-  ooc-wisent-wy--<keyword>-keyword-analyzer
+
   ooc-wisent-wy--<symbol>-regexp-analyzer
-  ;;  ooc-wisent-wy--<whitespace>-regexp-analyzer
-  ;;  ooc-wisent-wy--<newline>-regexp-analyzer
+
+  ;;ooc-wisent-wy--<newline>-regexp-analyzer
 
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-
+  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ;;  semantic-lex-ignore-whitespace
+  semantic-lex-newline-as-whitespace
+  semantic-lex-ignore-newline
+  semantic-lex-comments
 
   semantic-lex-ignore-all
   semantic-lex-default-action

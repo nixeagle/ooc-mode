@@ -2,8 +2,11 @@
 %languagemode ooc-mode
 
 %{
-  (defvar ooc-wisent-wy--current-import-path nil)
+(defvar ooc-wisent-wy--current-import-path nil)
+
+
   %}
+%use-macros ooc-grammar-macros {D}
 %start goal
 %start tuple_item
 %start array_literal_item
@@ -140,7 +143,7 @@
 %token <punctuation> SLASH         "/"
 %token <punctuation> SEMICOLON ";"
 
-%type <whitespace>      syntax "\\([\s]+\\)"
+%type <whitespace>      syntax "\\([\s\n]+\\)"
 %type <newline>      syntax "\\(\n\\|\s>\\)"
 %type <number>      syntax "-?\\(0c[0-8][0-8_]*\\|0b[01][01_]*\\|0x[0-9a-fA-F][0-9a-fA-F_]*\\|[0-9_]+\\.[0-9_]*\\|[0-9][0-9_]*\\)"
 
@@ -197,32 +200,30 @@
 %token <symbol> IDENTIFIER
 
 
-;;%token <whitespace> SPACES
-;;%type <newline>
-;;%token <newline> EOL
+%token <whitespace> SPACES
+%type <newline>
+%token <newline> EOL
 %%
 
 goal
   : import_statement
- ;;  | alphanumeric_dot
- ;; (TAG "TOPLEVEL" 'top! :thing $1)
   ;
 
 import_statement
-  : IMPORT_KW import_statement_list
-    (EXPANDFULL $2 import_atom)
+  : IMPORT_KW SPACES import_statement_list
+    (progn (D $1 $2 $3)
+           (EXPANDFULL $3 import_atom))
   ;
 
 import_statement_items
-  : DOUBLE_DOT SLASH
-    (concat $1 $2)
-  | import_path
+  : import_path
+    (D $1)
   | import_path import_statement_block
-    (progn  (concat $1 $2))
+    (D $1 $2)
   | import_path INTO_KW identifier
-    (concat $1 " " $2 " " $3)
+    (D $1 " " $2 " " $3)
   | import_path import_statement_block INTO_KW identifier
-    (concat $1 $2 " " $3 " " $4)
+    (D $1 $2 " " $3 " " $4)
   ;
 
 import_statement_block
@@ -230,8 +231,9 @@ import_statement_block
   ;
 import_statement_list
   : import_statement_items
+    (D $1)
   | import_statement_list COMMA import_statement_items
-    (concat $1 $2 $3)
+    (D $1 $2 $3)
   ;
 
 statements
@@ -252,7 +254,7 @@ statement_line
   ;
 
 statement
-  : import
+  : import_statement
   | tuple
   | ternary
   | bracketed_block
@@ -260,19 +262,12 @@ statement
   | KW
   ;
 
-
-
-
-;; import <path>/<filename>
-;; This only works for the simplest possible cases right now
-import
-  : IMPORT_KW import_list
-    (EXPANDTAG $2)
-  ;
-
 import_list
   : import_atom
+    (D $1)
   | import_list COMMA import_atom
+    (D $1)
+ ;;    (print (list "import_list:1" $1 $2 $3))
   ;
 
 import_path_list
@@ -309,9 +304,9 @@ import_atom_part
 
 import_path
   : alphanumeric_dot slash_optional
-    (concat $1 $2)
+    (D $1 $2)
   | import_path alphanumeric_dot slash_optional
-    (concat $1 $2 $3 )
+    (D $1 $2 $3 )
   ;
 
 
@@ -393,7 +388,8 @@ identifier
   ;
 
 alphanumeric_dot
-  : dots_rest ALPHANUMERIC dots_rest
+  : DOTS
+  | dots_rest ALPHANUMERIC dots_rest
     (concat $1 $2 $3)
   | alphanumeric_dot ALPHANUMERIC dots_rest
     (concat $1 $2 $3)
@@ -482,22 +478,24 @@ they are comment end characters)."
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
-  semantic-lex-ignore-comments
-  semantic-lex-ignore-newline
-  semantic-lex-ignore-whitespace
   ooc-wisent-wy--<number>-regexp-analyzer
+  ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
   ooc-wisent-wy--<block>-block-analyzer
-  ooc-wisent-wy--<keyword>-keyword-analyzer
+
   ooc-wisent-wy--<symbol>-regexp-analyzer
-  ;;  ooc-wisent-wy--<whitespace>-regexp-analyzer
-  ;;  ooc-wisent-wy--<newline>-regexp-analyzer
+
+  ;;ooc-wisent-wy--<newline>-regexp-analyzer
 
   semantic-lex-charquote
   semantic-lex-paren-or-list
   semantic-lex-close-paren
   semantic-lex-punctuation-type
-
+  ooc-wisent-wy--<whitespace>-regexp-analyzer
+  ;;  semantic-lex-ignore-whitespace
+  semantic-lex-newline-as-whitespace
+  semantic-lex-ignore-newline
+  semantic-lex-comments
 
   semantic-lex-ignore-all
   semantic-lex-default-action

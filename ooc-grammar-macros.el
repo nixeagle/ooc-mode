@@ -8,7 +8,7 @@
 ;; Version:
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 3
+;;     Update #: 6
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -45,9 +45,12 @@
 ;;
 ;;; Code:
 
+(defvar ooc-grammar-macros-debug-mode nil)
+
 (defun ooc-grammar-macros-D (&rest args)
-  `(progn (princ (format "%-50S [`%s']\n   next: %s"
-                         (list ,@args) wisent-loop wisent-input))
+  `(progn (when ooc-grammar-macros-debug-mode
+            (princ (format "%-50S [`%s']\n   next: %S\n"
+                           (list ,@args) wisent-loop wisent-input)))
           (concat ,@args)))
 
 (provide 'ooc-grammar-macros)
