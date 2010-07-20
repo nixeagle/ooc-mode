@@ -206,7 +206,7 @@
 %%
 
 goal
-  : import_statement
+  : statement
   ;
 
 import_statement
@@ -261,18 +261,18 @@ statement
   : import_statement
   | tuple
   | ternary
-  | bracketed_block
+ ;;  | bracketed_block
   | expression
   | KW
   ;
 
-import_list
-  : import_atom
-    (D $1)
-  | import_list COMMA - import_atom
-    (D $1)
- ;;    (print (list "import_list:1" $1 $2 $3))
-  ;
+;; import_list
+;;   : import_atom
+;;     (D $1)
+;;   | import_list COMMA - import_atom
+;;     (D $1)
+;;  ;;    (print (list "import_list:1" $1 $2 $3))
+;;   ;
 
 import_path_list
   : import_atom_part
@@ -358,6 +358,7 @@ bracketed_block_body
   | expression
     (progn  (CODE-TAG $1 nil nil))
   ;
+
 
 value_core
   : number_literal
@@ -449,12 +450,11 @@ DOTS
   ;
 ;; Match all types of whitespace including comments (treat them as
 ;; whitespace for now...).
-;;WHITESPACE
-;;  : ;; EMPTY
- ;;  | SPACES
- ;;  | EOL
- ;;  | comment
-;;;
+WS
+  : ;; EMPTY
+  | SPACES
+  | comment
+  ;
 
 BOOLEAN_LITERAL
   : TRUE_KW
@@ -482,6 +482,7 @@ they are comment end characters)."
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
+  semantic-lex-comments
   ooc-wisent-wy--<number>-regexp-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
@@ -499,7 +500,7 @@ they are comment end characters)."
   ;;  semantic-lex-ignore-whitespace
   ;;  semantic-lex-newline-as-whitespace
   ;;  semantic-lex-ignore-newline
-  semantic-lex-comments
+
 
   semantic-lex-ignore-all
   semantic-lex-default-action

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010 James
 
 ;; Author: James <i@nixeagle.org>
-;; Created: 2010-07-20 00:44:44+0000
+;; Created: 2010-07-20 01:08:16+0000
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 
@@ -193,7 +193,7 @@
      '((BREAK_KW CONTINUE_KW RETURN_KW FUNC_KW CLASS_KW COVER_KW ENUM_KW INTERFACE_KW FROM_KW ABSTRACT_KW FINAL_KW STATIC_KW INLINE_KW EXTENDS_KW EXTERN_KW UNMANGLED_KW IMPLEMENTS_KW IMPORT_KW INCLUDE_KW USE_KW IF_KW ELSE_KW FOR_KW WHILE_KW MATCH_KW CASE_KW AS_KW IN_KW INTO_KW VERSION_KW PROTO_KW SET_KW GET_KW OPERATOR_KW CONST_KW TRUE_KW FALSE_KW NULL_KW COMMA DOUBLE_DOT DOT COLON ASS_DECL ASS ASS_ADD ASS_SUB ASS_MUL OOCDOC_SINGLE_LINE_START COMMENT_SINGLE_LINE_START ASS_DIV ASS_B_RSHIFT ASS_B_LSHIFT ASS_B_XOR ASS_B_OR ASS_B_AND QUESTION LOGIC_OR LOGIC_AND BINARY_OR BINARY_XOR BINARY_AND EQUALS NOT_EQUALS LESSTHAN MORETHAN CMP LESSTHAN_EQ MORETHAN_EQ BINARY_LSHIFT BINARY_RSHIFT LOGIC_NOT BINARY_NOT PLUS MINUS PERCENT STAR SLASH SEMICOLON PAREN_BLOCK SQUARE_BLOCK BRACKET_BLOCK OPEN_PAREN CLOSE_PAREN OPEN_SQUARE CLOSE_SQUARE OPEN_BRACKET CLOSE_BRACKET DEC_LITERAL FLOAT_LITERAL OCT_LITERAL BIN_LITERAL HEX_LITERAL TILDE STRING_LITERAL ALPHANUMERIC IDENTIFIER SPACES EOL)
        nil
        (goal
-        ((import_statement)))
+        ((statement)))
        (import_statement
         ((IMPORT_KW SPACES import_statement_list)
          (progn
@@ -286,26 +286,8 @@
         ((import_statement))
         ((tuple))
         ((ternary))
-        ((bracketed_block))
         ((expression))
         ((KW)))
-       (import_list
-        ((import_atom)
-         (progn
-           (when ooc-grammar-macros-debug-mode
-             (princ
-              (format "%-50S [`%s']\n   next: %S\n"
-                      (list $1)
-                      wisent-loop wisent-input)))
-           (concat $1)))
-        ((import_list COMMA - import_atom)
-         (progn
-           (when ooc-grammar-macros-debug-mode
-             (princ
-              (format "%-50S [`%s']\n   next: %S\n"
-                      (list $1)
-                      wisent-loop wisent-input)))
-           (concat $1))))
        (import_path_list
         ((import_atom_part)
          (cons $1 nil))
@@ -573,6 +555,7 @@ they are comment end characters)."
   "Lexical analyzer for ooc."
 
   ;;  semantic-lex-beginning-of-line
+  semantic-lex-comments
   ooc-wisent-wy--<number>-regexp-analyzer
   ooc-wisent-wy--<keyword>-keyword-analyzer
   ooc-wisent-wy--<string>-sexp-analyzer
@@ -590,7 +573,7 @@ they are comment end characters)."
   ;;  semantic-lex-ignore-whitespace
   ;;  semantic-lex-newline-as-whitespace
   ;;  semantic-lex-ignore-newline
-  semantic-lex-comments
+
 
   semantic-lex-ignore-all
   semantic-lex-default-action
