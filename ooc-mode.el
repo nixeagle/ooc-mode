@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 154
+;;     Update #: 155
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -194,7 +194,7 @@ These cover classes, functions, templates, and variables.")
                                       "do" "switch" "case" "version" "return" "ctype"
                                       "typedef" "use" "extends" "enum"
                                       "as" "in" "match" "implements"
-                                      "interface" "proto"
+                                      "interface" "proto" "extern"
                                       ) t)
                         "\\>")
                 'font-lock-keyword-face)
