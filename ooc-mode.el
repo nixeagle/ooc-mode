@@ -8,7 +8,7 @@
 ;; Version: 0.1
 ;; Last-Updated:
 ;;           By:
-;;     Update #: 152
+;;     Update #: 153
 ;; URL:
 ;; Keywords:
 ;; Compatibility:
@@ -264,8 +264,6 @@ These cover classes, functions, templates, and variables.")
       (lambda ()
         (interactive)
         (insert "}")
-        (funcall indent-line-function)
-        (insert "\n")
         (funcall indent-line-function)))
     map))
 
