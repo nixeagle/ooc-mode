@@ -1,4 +1,4 @@
-;;; ooc-mode.el ---
+;;; ooc-mode.el --- ???
 ;;
 ;; Filename: ooc-mode.el
 ;; Description:
